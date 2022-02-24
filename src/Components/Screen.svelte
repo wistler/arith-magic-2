@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import { fly, fade } from "svelte/transition";
+  import type { ScreenProps } from "./@types/Screen";
   import {
     ScreenStackNavigatorCxt,
     STACK_NAVIGATOR_CXT_KEY,
@@ -9,6 +10,12 @@
   const navigatorCxt = getContext(
     STACK_NAVIGATOR_CXT_KEY
   ) as ScreenStackNavigatorCxt;
+
+  export let props: ScreenProps = {};
+  let style = "";
+  if (props.bgImageURL) {
+    style += `background-image: url(${props.bgImageURL});`;
+  }
 </script>
 
 <!--
@@ -17,6 +24,7 @@
  -->
 <blanket in:fade out:fade={{ delay: 250, duration: 400 }}>
   <screen
+    {style}
     in:fly={{ y: 50, delay: 250, duration: 200 }}
     out:fly={{ y: 50, delay: 0 }}
   >
@@ -45,14 +53,16 @@
   }
 
   screen {
-    /* grid-row: 2; */
-    /* grid-column: 2; */
     background-color: white;
-    /* border: 1px solid black; */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     width: 100%;
     height: 100%;
-    /* border-radius: 1em; */
 
-    /* padding: 0 5% 10% 5%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 </style>
