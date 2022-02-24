@@ -16,19 +16,29 @@
   if (props.bgImageURL) {
     style += `background-image: url(${props.bgImageURL});`;
   }
+
+  let blanketStyle = "";
+  if (props.blanketImageURL) {
+    blanketStyle += `background-image: url(${props.blanketImageURL});`;
+    style += `background-color: rgba(0, 0, 0, 0); `;
+  }
 </script>
 
 <!--
   Blanket is used for shadowing underlying screen as this screen transitions in/out.
   Blanket will be fully hidden by screen after transition complete.
  -->
-<blanket in:fade out:fade={{ delay: 250, duration: 400 }}>
+<blanket
+  style={blanketStyle}
+  in:fly={{ y: 50 }}
+  out:fly={{ y: 50, delay: 250, duration: 400 }}
+>
   <screen
     {style}
     in:fly={{ y: 50, delay: 250, duration: 200 }}
     out:fly={{ y: 50, delay: 0 }}
   >
-    <slot {...navigatorCxt} />
+    <slot class="content" {...navigatorCxt} />
   </screen>
 </blanket>
 
@@ -36,11 +46,15 @@
   blanket {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
-
-    user-select: none;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     height: 100%;
     width: 100%;
+
     overflow: hidden;
+    box-sizing: border-box;
+    user-select: none;
 
     text-align: center;
     margin: 0 auto;
@@ -60,9 +74,17 @@
     width: 100%;
     height: 100%;
 
+    overflow: hidden;
+    box-sizing: border-box;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  .content {
+    overflow: hidden;
+    box-sizing: border-box;
   }
 </style>
