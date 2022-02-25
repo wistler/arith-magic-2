@@ -5,16 +5,21 @@
 </script>
 
 <Screen let:navigateTo props={{ bgImageURL: bg }}>
-  <img
-    src={logo}
-    alt="ArithMagic Logo"
-    width="60%"
-    style="align-self: center;"
-  />
-  <div>Main Menu</div>
-  <button on:click={() => navigateTo("SelectionScreen")}>Play</button>
-  <button on:click={() => navigateTo("SettingsScreen")}>Settings</button>
+  <img src={logo} alt="ArithMagic Logo" class="logo" />
+  <div class="menu">
+    <div>Main Menu</div>
+    <button on:click={() => navigateTo("SelectionScreen")}>Play</button>
+    <button on:click={() => navigateTo("SettingsScreen")}>Settings</button>
+  </div>
 </Screen>
 
 <style>
+  .logo,
+  .menu {
+    align-self: center;
+    max-width: 50%;
+    flex: 1;
+    object-fit: contain;
+    object-position: bottom;
+  }
 </style>
