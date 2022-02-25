@@ -1,9 +1,13 @@
 <script lang="ts">
+  import Header from "./Components/Header.svelte";
   import ScreenNavigator from "./Components/ScreenStackNavigator.svelte";
+  import bg from "./assets/Images/bg_2x.jpg";
+
   import { SCREENS } from "./Screens";
 </script>
 
-<main>
+<main style="background-image: url({bg});">
+  <Header />
   <ScreenNavigator screenList={SCREENS} rootScreenKey="LauncherScreen" />
 </main>
 
@@ -15,7 +19,7 @@
 
   main {
     user-select: none;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     overflow: hidden;
     text-align: center;
@@ -23,6 +27,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
   }
 </style>

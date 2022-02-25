@@ -3,18 +3,16 @@
 
   import { fly, fade } from "svelte/transition";
   import Screen from "../Components/Screen.svelte";
-  import bg from "../assets/Images/bg_2x.jpg";
   import logo from "../assets/Images/arithmagic.png";
 </script>
 
-<Screen let:navigateTo props={{ bgImageURL: bg }} {...$$restProps}>
+<Screen let:navigateTo {...$$restProps}>
   <img
     data-animation
     transition:fly
     class="logo"
     src={logo}
     alt="ArithMagic Logo"
-    width="60%"
     style="align-self: center;"
   />
   <div class="menu">
@@ -26,21 +24,23 @@
       Settings
     </WhiteButton>
   </div>
+  <spacer />
 </Screen>
 
 <style>
   * {
     margin: 0.25em;
-    padding: 0.25em;
+    /* padding: 0.25em; */
   }
 
   .logo,
   .menu {
     align-self: center;
-    max-width: 50%;
     flex: 1;
-    object-fit: contain;
-    object-position: bottom;
+  }
+
+  spacer {
+    flex: 0.2;
   }
 
   .menu {
@@ -49,6 +49,10 @@
   }
 
   .logo {
+    width: 10em;
+    max-width: 80%;
+    object-fit: contain;
+    object-position: bottom;
     animation: floater 5s ease-in-out infinite alternate;
   }
 
@@ -58,7 +62,7 @@
     }
     100% {
       filter: drop-shadow(25px 25px 15px #222);
-      transform: translateY(-10%);
+      transform: translateY(-4%);
     }
   }
 </style>

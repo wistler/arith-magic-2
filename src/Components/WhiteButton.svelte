@@ -4,12 +4,9 @@
 <button on:click><slot /></button>
 
 <style>
-  * {
-    margin: 0.25em;
-    padding: 0.25em;
-  }
-
   button {
+    padding: 0.25em 0.5em 0.25em 0.5em;
+
     margin: 0.4em;
     background-color: white;
     border: none;

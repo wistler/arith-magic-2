@@ -5,15 +5,9 @@
 <script lang="ts">
   import Screen from "../Components/Screen.svelte";
   import WhiteButton from "../Components/WhiteButton.svelte";
-  import bg from "../assets/Images/bg_2x.jpg";
 </script>
 
-<Screen
-  let:navigateTo
-  let:back
-  props={{ blanketImageURL: bg }}
-  {...$$restProps}
->
+<Screen let:navigateTo let:back {...$$restProps}>
   <div>Select a level to play ..</div>
   <WhiteButton on:click={() => navigateTo("GameScreen")}>Start</WhiteButton>
   <WhiteButton on:click={back}>Back</WhiteButton>

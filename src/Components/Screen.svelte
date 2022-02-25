@@ -7,11 +7,15 @@
     STACK_NAVIGATOR_CXT_KEY,
   } from "./@types/ScreenStackNavigator";
 
+  export let props: ScreenProps = {};
+  export let screenKey: string = undefined;
+  // export let screenIndex: number = undefined;
+  export let onTop: boolean = undefined;
+
   const navigatorCxt = getContext(
     STACK_NAVIGATOR_CXT_KEY
   ) as ScreenStackNavigatorCxt;
 
-  export let props: ScreenProps = {};
   let style = "";
   if (props.bgImageURL) {
     style += `background-image: url(${props.bgImageURL});`;
@@ -23,9 +27,9 @@
     style += `background-color: rgba(0, 0, 0, 0); `;
   }
 
-  export let screenKey: string = undefined;
-  // export let screenIndex: number = undefined;
-  export let onTop: boolean = undefined;
+  // $: {
+  //   blanketStyle += `opacity: ${onTop ? 1 : 0};`;
+  // }
 
   let screen: HTMLElement;
 
@@ -69,6 +73,7 @@
   Blanket will be fully hidden by screen after transition complete.
  -->
 <blanket
+  {onTop}
   style={blanketStyle}
   in:fly={{ y: 50 }}
   out:fly={{ y: 50, delay: 250, duration: 400 }}
@@ -86,7 +91,7 @@
 <style>
   blanket {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
+    /* background-color: rgba(0, 0, 0, 0.8); */
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -100,15 +105,21 @@
     text-align: center;
     margin: 0 auto;
 
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 100%;
-    align-items: center;
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+
+    transition: all 250ms ease-in-out;
+  }
+
+  blanket[onTop="false"] {
+    background-color: white;
+    border-radius: 1em;
+    opacity: 0;
+    transform: scale(0.9) translateY(10%);
   }
 
   screen {
-    background-color: white;
+    /* background-color: white; */
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -118,6 +129,7 @@
     overflow: hidden;
     box-sizing: border-box;
 
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;

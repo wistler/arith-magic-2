@@ -55,6 +55,11 @@
     overflow: hidden;
     text-align: center;
     margin: 0 auto;
+
+    position: relative;
+
+    flex: 1;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
