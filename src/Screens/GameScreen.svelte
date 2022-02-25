@@ -4,7 +4,7 @@
   let screenIndex = 0;
 </script>
 
-<Screen let:back>
+<Screen let:back {...$$restProps}>
   <div>Nice game!</div>
   <button on:click={back}>Back</button>
   <Counter />

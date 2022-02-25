@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
   import { fly, fade } from "svelte/transition";
   import type { ScreenProps } from "./@types/Screen";
   import {
@@ -22,6 +22,46 @@
     blanketStyle += `background-image: url(${props.blanketImageURL});`;
     style += `background-color: rgba(0, 0, 0, 0); `;
   }
+
+  export let screenKey: string = undefined;
+  // export let screenIndex: number = undefined;
+  export let onTop: boolean = undefined;
+
+  let screen: HTMLElement;
+
+  $: {
+    if (onTop) {
+      prepareToUnhide();
+    } else {
+      hidden();
+    }
+  }
+
+  function prepareToUnhide() {
+    // resume any animations
+    console.debug(`${screenKey} prepareToUnhide..`);
+    console.debug(`${screenKey} resuming animations..`);
+    screen
+      ?.querySelectorAll("[data-animation]")
+      .forEach((e: HTMLElement) => (e.style.animationPlayState = "running"));
+  }
+
+  function hidden() {
+    // pause any animations
+    console.debug(`${screenKey} hidden..`);
+    screen
+      .querySelectorAll("[data-animation]")
+      .forEach((e: HTMLElement) => (e.style.animationPlayState = "paused"));
+    console.debug(`${screenKey} paused animations..`);
+  }
+
+  onMount(() => {
+    console.debug(`${screenKey} mounted..`);
+  });
+
+  onDestroy(() => {
+    console.debug(`${screenKey} destroyed..`);
+  });
 </script>
 
 <!--
@@ -34,6 +74,7 @@
   out:fly={{ y: 50, delay: 250, duration: 400 }}
 >
   <screen
+    bind:this={screen}
     {style}
     in:fly={{ y: 50, delay: 250, duration: 200 }}
     out:fly={{ y: 50, delay: 0 }}

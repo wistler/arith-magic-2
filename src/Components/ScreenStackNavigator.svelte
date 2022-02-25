@@ -38,8 +38,12 @@
 </script>
 
 <main>
-  {#each stack as entry}
-    <svelte:component this={findEntry(entry).screen} />
+  {#each stack as screenKey, screenIndex}
+    {@const screenProp = {
+      screenKey,
+      onTop: screenIndex === stack.length - 1,
+    }}
+    <svelte:component this={findEntry(screenKey).screen} {...screenProp} />
   {/each}
 </main>
 

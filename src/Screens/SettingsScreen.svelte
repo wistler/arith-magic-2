@@ -2,7 +2,7 @@
   import Screen from "../Components/Screen.svelte";
 </script>
 
-<Screen let:navigateTo let:back>
+<Screen let:navigateTo let:back {...$$restProps}>
   <div>Settings ...</div>
   <button on:click={back}>Back</button>
 </Screen>

@@ -1,10 +1,6 @@
 <script lang="ts">
   import ScreenNavigator from "./Components/ScreenStackNavigator.svelte";
-  import LauncherScreen from "./Screens/LauncherScreen.svelte";
-  import SelectionScreen from "./Screens/SelectionScreen.svelte";
-  import GameScreen from "./Screens/GameScreen.svelte";
-  import SettingsScreen from "./Screens/SettingsScreen.svelte";
-  import { SCREENS } from "./Screens/@types";
+  import { SCREENS } from "./Screens";
 </script>
 
 <main>

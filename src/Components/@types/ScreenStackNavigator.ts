@@ -1,4 +1,4 @@
-import type { ScreenKey } from "src/Screens/@types";
+import type { ScreenKey } from "src/Screens";
 
 export type ScreenStackNavigatorCxt = {
     getCurrentScreenKey: () => ScreenKey;
