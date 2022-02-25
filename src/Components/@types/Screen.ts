@@ -1,3 +1,4 @@
 export type ScreenProps = Partial<{
-    bgImageURL: string
-}>
+  bgImageURL: string;
+  blanketImageURL: string;
+}>;

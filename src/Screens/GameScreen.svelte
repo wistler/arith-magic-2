@@ -11,4 +11,8 @@
 </Screen>
 
 <style>
+  * {
+    margin: 0.25em;
+    padding: 0.25em;
+  }
 </style>
