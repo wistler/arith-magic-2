@@ -42,28 +42,38 @@
       operators: ["-", "+"],
       levelUnlocked: 0,
     },
+    {
+      operators: ["-", "+"],
+      levelUnlocked: 0,
+    },
+    {
+      operators: ["-", "+"],
+      levelUnlocked: 0,
+    },
   ];
 </script>
 
 <Screen let:navigateTo let:back {...$$restProps}>
-  <list>
-    {#each listing as { operators, levelUnlocked }}
-      <row>
-        <operators>
-          {#each operators as op}
-            <img
-              src={operatorIcons[op][levelUnlocked > 0 ? "active" : "grey"]}
-              alt={op}
-            />
-          {/each}
-        </operators>
-        <WhiteButton>
-          <img src={grid} alt="grid" style="width: 1em" />
-        </WhiteButton>
-        <WhiteButton>Lv {levelUnlocked} ></WhiteButton>
-      </row>
-    {/each}
-  </list>
+  <list-box>
+    <list>
+      {#each listing as { operators, levelUnlocked }}
+        <row>
+          <operators>
+            {#each operators as op}
+              <img
+                src={operatorIcons[op][levelUnlocked > 0 ? "active" : "grey"]}
+                alt={op}
+              />
+            {/each}
+          </operators>
+          <WhiteButton>
+            <img src={grid} alt="grid" style="width: 1em" />
+          </WhiteButton>
+          <WhiteButton>Lv {levelUnlocked} ></WhiteButton>
+        </row>
+      {/each}
+    </list>
+  </list-box>
   <div>
     <!-- <WhiteButton on:click={() => navigateTo("GameScreen")}>Start</WhiteButton> -->
     <WhiteButton on:click={back}>Back</WhiteButton>
@@ -75,16 +85,26 @@
     margin: 0.25em;
     padding: 0.25em;
   } */
+  list-box {
+    flex: 1;
+    height: 100%;
+    max-width: 17em;
+    min-width: 13em;
+    overflow: hidden;
+    padding-left: 20px;
+  }
   list {
     font-size: 0.8em;
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 20em;
+    height: 100%;
+    /* max-height: 60%; */
     overflow-y: scroll;
     scroll-behavior: smooth;
     /* TODO: Hide scrollbar in Desktop Mode */
     box-sizing: content-box;
+    padding-right: 50px;
   }
   row {
     margin: 0.3em;
