@@ -5,6 +5,7 @@
 <script lang="ts">
   import Screen from "../Components/Screen.svelte";
   import WhiteButton from "../Components/WhiteButton.svelte";
+  import { newGame } from "../store/game";
 
   import operatorPlus from "../assets/Images/operator-plus.png";
   import operatorPlusGrey from "../assets/Images/operator-plus-grey.png";
@@ -66,10 +67,19 @@
               />
             {/each}
           </operators>
-          <WhiteButton>
+          <WhiteButton disabled={levelUnlocked <= 1}>
             <img src={grid} alt="grid" style="width: 1em" />
           </WhiteButton>
-          <WhiteButton>Lv {levelUnlocked} ></WhiteButton>
+          <WhiteButton
+            disabled={levelUnlocked == 0}
+            on:click={() => {
+              /* hello */
+              newGame(levelUnlocked);
+              navigateTo("GameScreen");
+            }}
+          >
+            Lv {levelUnlocked} >
+          </WhiteButton>
         </row>
       {/each}
     </list>
@@ -88,10 +98,10 @@
   list-box {
     flex: 1;
     height: 100%;
-    max-width: 17em;
-    min-width: 13em;
+    /* max-width: 17em; */
+    /* min-width: 13em; */
     overflow: hidden;
-    padding-left: 20px;
+    /* padding-left: 20px; */
   }
   list {
     font-size: 0.8em;
