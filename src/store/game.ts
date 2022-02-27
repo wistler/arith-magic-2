@@ -1,7 +1,5 @@
 import _ from "lodash";
-import { randomInRange } from "../util/range";
-
-import { derived, get, Readable, writable } from "svelte/store";
+import { persisted } from "../util/persited";
 import { makeBoard } from "../lib/game";
 
 export type TileHiliteType = "normal" | "hint" | "disabled";
@@ -16,7 +14,7 @@ export type GameBoardStateType = {
   board: Array<Array<TileStateType>>;
 };
 
-export const gameState = writable<GameBoardStateType>({
+export const gameState = persisted<GameBoardStateType>("gameState", {
   level: 0,
   board: undefined,
 });

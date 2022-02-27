@@ -4,11 +4,16 @@
   import bg from "./assets/Images/bg_2x.jpg";
 
   import { SCREENS } from "./Screens";
+  import { navStack } from "./store/navigation";
 </script>
 
 <main style="background-image: url({bg});">
   <Header />
-  <ScreenNavigator screenList={SCREENS} rootScreenKey="LauncherScreen" />
+  <ScreenNavigator
+    bind:stack={$navStack}
+    screenList={SCREENS}
+    rootScreenKey="LauncherScreen"
+  />
 </main>
 
 <style>

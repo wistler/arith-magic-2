@@ -54,7 +54,7 @@
     // pause any animations
     console.debug(`${screenKey} hidden..`);
     screen
-      .querySelectorAll("[data-animation]")
+      ?.querySelectorAll("[data-animation]")
       .forEach((e: HTMLElement) => (e.style.animationPlayState = "paused"));
     console.debug(`${screenKey} paused animations..`);
   }
