@@ -3,55 +3,13 @@
 </script>
 
 <script lang="ts">
+  import Images, { OperatorIcons } from "../assets/images";
   import Screen from "../Components/Screen.svelte";
   import WhiteButton from "../Components/WhiteButton.svelte";
   import { newGame } from "../store/game";
+  import { getListing } from "../store/profile";
 
-  import operatorPlus from "../assets/Images/operator-plus.png";
-  import operatorPlusGrey from "../assets/Images/operator-plus-grey.png";
-  import operatorMinus from "../assets/Images/operator-minus.png";
-  import operatorMinusGrey from "../assets/Images/operator-minus-grey.png";
-  import grid from "../assets/Images/grid.png";
-
-  const operatorIcons = {
-    "+": { active: operatorPlus, grey: operatorPlusGrey },
-    "-": { active: operatorMinus, grey: operatorMinusGrey },
-  };
-
-  let listing = [
-    {
-      operators: ["+", "+"],
-      levelUnlocked: 2,
-    },
-    {
-      operators: ["+", "-"],
-      levelUnlocked: 1,
-    },
-    {
-      operators: ["-", "-"],
-      levelUnlocked: 0,
-    },
-    {
-      operators: ["-", "+"],
-      levelUnlocked: 0,
-    },
-    {
-      operators: ["-", "+"],
-      levelUnlocked: 0,
-    },
-    {
-      operators: ["-", "+"],
-      levelUnlocked: 0,
-    },
-    {
-      operators: ["-", "+"],
-      levelUnlocked: 0,
-    },
-    {
-      operators: ["-", "+"],
-      levelUnlocked: 0,
-    },
-  ];
+  let listing = getListing();
 </script>
 
 <Screen let:navigateTo let:back {...$$restProps}>
@@ -62,18 +20,17 @@
           <operators>
             {#each operators as op}
               <img
-                src={operatorIcons[op][levelUnlocked > 0 ? "active" : "grey"]}
+                src={OperatorIcons[op][levelUnlocked > 0 ? "active" : "grey"]}
                 alt={op}
               />
             {/each}
           </operators>
           <WhiteButton disabled={levelUnlocked <= 1}>
-            <img src={grid} alt="grid" style="width: 1em" />
+            <img src={Images.grid} alt="grid" style="width: 1em" />
           </WhiteButton>
           <WhiteButton
             disabled={levelUnlocked == 0}
             on:click={() => {
-              /* hello */
               newGame(levelUnlocked);
               navigateTo("GameScreen");
             }}
