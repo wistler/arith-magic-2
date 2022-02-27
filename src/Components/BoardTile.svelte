@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TileHiliteType } from "../store/game";
 
-  export let hilite: TileHiliteType = "normal";
+  export let hilite: TileHiliteType | "selected" = "normal";
 </script>
 
 <div class={hilite}>

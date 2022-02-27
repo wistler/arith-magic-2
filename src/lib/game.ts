@@ -1,5 +1,6 @@
 import _ from "lodash";
-import type { GameBoardStateType } from "../store/game";
+import { randomInRange } from "../util/range";
+import type { GameBoardStateType, TileStateType } from "../store/game";
 
 export type Coord = {
   row: number;
@@ -59,4 +60,45 @@ export function getNextSelectionIndex(
     return activeSelection.length + 1;
   }
   return -1;
+}
+
+export function getBoardSpec(level: number) {
+  let boardSize = 7;
+  let minTile = 0;
+  let maxTile = 9;
+
+  if (level <= 3) boardSize = 3;
+  else if (level <= 6) boardSize = 4;
+  else if (level <= 9) boardSize = 5;
+  else if (level <= 12) boardSize = 6;
+
+  minTile = Math.max(level - 3, 0);
+  maxTile = Math.max(9 + level - 3, 9);
+
+  return { boardSize, minTile, maxTile };
+}
+
+export function makeBoard(level: number): TileStateType[][] {
+  let { boardSize, minTile, maxTile } = getBoardSpec(level);
+
+  let nTiles = boardSize * boardSize;
+  let pool = [];
+  while (pool.length < nTiles) {
+    pool = pool.concat(_.range(minTile, maxTile));
+  }
+  pool = _.shuffle(pool);
+
+  let board: Array<Array<TileStateType>> = [];
+  for (let i = 0; i < boardSize; i++) {
+    let row: Array<TileStateType> = [];
+    for (let j = 0; j < boardSize; j++) {
+      row.push({
+        label: "" + pool.pop(),
+        hilite: "normal",
+        selectionIndex: -1,
+      });
+    }
+    board.push(row);
+  }
+  return board;
 }

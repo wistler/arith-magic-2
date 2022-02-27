@@ -35,11 +35,7 @@
         switch ($gameState.board[+row][+col].hilite) {
           case "normal":
           case "hint":
-            $gameState.board[+row][+col] = {
-              ...$gameState.board[+row][+col],
-              hilite: "selected",
-              selectionIndex: nextSelectionIndex,
-            };
+            $gameState.board[+row][+col].selectionIndex = nextSelectionIndex;
             break;
         }
       }
@@ -52,11 +48,7 @@
       const row = $gameState.board[i];
       for (let j = 0; j < row.length; j++) {
         if ($gameState.board[i][j].selectionIndex >= 0) {
-          $gameState.board[i][j] = {
-            ...$gameState.board[i][j],
-            selectionIndex: -1,
-            hilite: "normal",
-          };
+          $gameState.board[i][j].selectionIndex = -1;
         }
       }
     }
@@ -74,7 +66,10 @@
     {#each $gameState.board as row, i}
       {#each row as tile, j}
         <div data-row={i} data-col={j}>
-          <BoardTile hilite={tile.hilite}>{tile.label}</BoardTile>
+          <BoardTile
+            hilite={tile.selectionIndex >= 0 ? "selected" : tile.hilite}
+            >{tile.label}</BoardTile
+          >
         </div>
       {/each}
     {/each}

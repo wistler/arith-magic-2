@@ -2,8 +2,9 @@ import _ from "lodash";
 import { randomInRange } from "../util/range";
 
 import { derived, get, Readable, writable } from "svelte/store";
+import { makeBoard } from "../lib/game";
 
-export type TileHiliteType = "normal" | "selected" | "hint" | "disabled";
+export type TileHiliteType = "normal" | "hint" | "disabled";
 export type TileStateType = {
   label: string;
   hilite: TileHiliteType;
@@ -23,23 +24,8 @@ export const gameState = writable<GameBoardStateType>({
 export function newGame(level: number) {
   const newState: GameBoardStateType = {
     level,
-    board: undefined,
+    board: makeBoard(level),
   };
-
-  let board: Array<Array<TileStateType>> = [];
-  let boardSize = 7;
-  for (let i = 0; i < boardSize; i++) {
-    let row: Array<TileStateType> = [];
-    for (let j = 0; j < boardSize; j++) {
-      row.push({
-        label: "" + randomInRange(0, 9),
-        hilite: "normal",
-        selectionIndex: -1,
-      });
-    }
-    board.push(row);
-  }
-  newState.board = board;
 
   gameState.set(newState);
 }
