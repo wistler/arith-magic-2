@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Coord, getNextSelectionIndex } from "../lib/game";
+
   import BoardTile from "../Components/BoardTile.svelte";
   import Screen from "../Components/Screen.svelte";
   import { gameState } from "../store/game";
@@ -16,11 +18,28 @@
       const { row, col } = dataset;
       if (row !== undefined && col !== undefined) {
         // console.debug({ row, col });
+
+        const next: Coord = { row: +row, col: +col };
+        if ($gameState.board[+row][+col].selectionIndex >= 0) {
+          return;
+        }
+
+        const nextSelectionIndex = getNextSelectionIndex(
+          $gameState,
+          next,
+          "linear"
+        );
+        if (nextSelectionIndex === -1) return;
+
         // TODO: implement logic to handle selection into global store
         switch ($gameState.board[+row][+col].hilite) {
           case "normal":
           case "hint":
-            $gameState.board[+row][+col].hilite = "selected";
+            $gameState.board[+row][+col] = {
+              ...$gameState.board[+row][+col],
+              hilite: "selected",
+              selectionIndex: nextSelectionIndex,
+            };
             break;
         }
       }
@@ -32,10 +51,12 @@
     for (let i = 0; i < $gameState.board.length; i++) {
       const row = $gameState.board[i];
       for (let j = 0; j < row.length; j++) {
-        switch ($gameState.board[i][j].hilite) {
-          case "selected":
-            $gameState.board[i][j].hilite = "normal";
-            break;
+        if ($gameState.board[i][j].selectionIndex >= 0) {
+          $gameState.board[i][j] = {
+            ...$gameState.board[i][j],
+            selectionIndex: -1,
+            hilite: "normal",
+          };
         }
       }
     }

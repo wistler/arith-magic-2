@@ -7,6 +7,7 @@ export type TileHiliteType = "normal" | "selected" | "hint" | "disabled";
 export type TileStateType = {
   label: string;
   hilite: TileHiliteType;
+  selectionIndex: number;
 };
 
 export type GameBoardStateType = {
@@ -33,6 +34,7 @@ export function newGame(level: number) {
       row.push({
         label: "" + randomInRange(0, 9),
         hilite: "normal",
+        selectionIndex: -1,
       });
     }
     board.push(row);
