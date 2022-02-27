@@ -1,5 +1,4 @@
-import _ from "lodash";
-import { randomInRange } from "../util/range";
+import _, { toNumber } from "lodash";
 import type { GameBoardStateType, TileStateType } from "../store/game";
 
 export type Coord = {
@@ -21,6 +20,13 @@ function sum(c1: Coord, c2: Coord): Coord {
   };
 }
 
+function scale(c1: Coord, s: number): Coord {
+  return {
+    row: c1.row * s,
+    col: c1.col * s,
+  };
+}
+
 const SelectionRules = {
   linear: function (active: Coord[], next: Coord) {
     if (active.length < 2) return true;
@@ -31,6 +37,28 @@ const SelectionRules = {
     }
     return false;
   },
+};
+
+export const SupportedDirectionDeltas = {
+  "horizontal-LTR": { row: 0, col: 1 },
+  "horizontal-RTL": { row: 0, col: -1 },
+  "vertical-downward": { row: +1, col: 0 },
+  "vertical-upward": { row: -1, col: 0 },
+  "diagonal-downward-right": { row: +1, col: +1 },
+  "diagonal-downward-left": { row: +1, col: -1 },
+  "diagonal-upward-right": { row: -1, col: +1 },
+  "diagonal-upward-left": { row: -1, col: -1 },
+};
+export type SupportedDirectionTypes = keyof typeof SupportedDirectionDeltas;
+const ALL_SUPPORTED_DIRS = _.keys(
+  SupportedDirectionDeltas
+) as SupportedDirectionTypes[];
+
+export type Operators = "+" | "-" | "*";
+const OperatorRules: Record<Operators, (a: number, b: number) => number> = {
+  "+": (a: number, b: number) => a + b,
+  "-": (a: number, b: number) => a - b,
+  "*": (a: number, b: number) => a * b,
 };
 
 export type SelectionRuleTypes = keyof typeof SelectionRules;
@@ -78,27 +106,98 @@ export function getBoardSpec(level: number) {
   return { boardSize, minTile, maxTile };
 }
 
-export function makeBoard(level: number): TileStateType[][] {
+function isCoordInRange(matrix: number[][], coord: Coord) {
+  return (
+    coord.row >= 0 &&
+    coord.col >= 0 &&
+    coord.row < matrix.length &&
+    coord.col < matrix[0].length
+  );
+}
+
+function findAllSolutions(
+  matrix: number[][],
+  ops: Operators[],
+  dirs: SupportedDirectionTypes[]
+): {
+  [k: number]: number | undefined;
+} {
+  let opFns = ops.map((ch) => OperatorRules[ch]);
+  let solutions: {
+    [k: number]: number;
+  } = {};
+  for (let row = 0; row < matrix.length; row++) {
+    for (let col = 0; col < matrix[row].length; col++) {
+      // console.debug(`iterating: [${row}, ${col}] ..`);
+      for (let d = 0; d < dirs.length; d++) {
+        const delta = SupportedDirectionDeltas[dirs[d]];
+        const c2 = sum({ row, col }, scale(delta, opFns.length));
+        if (!isCoordInRange(matrix, c2)) {
+          continue;
+        }
+
+        let acc = matrix[row][col];
+        let dbg = dirs[d] + ": " + acc;
+        for (let k = 0; k < opFns.length; k++) {
+          const ck = sum({ row, col }, scale(delta, k + 1));
+          acc = opFns[k](acc, matrix[ck.row][ck.col]);
+          dbg += ops[k] + matrix[ck.row][ck.col];
+        }
+        dbg += "=" + acc;
+        console.debug(dbg);
+        solutions[acc] = (solutions[acc] || 0) + 1;
+      }
+    }
+  }
+
+  return solutions;
+}
+
+export function makeBoard(
+  ops: Operators[],
+  level: number
+): { board: TileStateType[][]; targets: number[] } {
   let { boardSize, minTile, maxTile } = getBoardSpec(level);
 
   let nTiles = boardSize * boardSize;
   let pool = [];
   while (pool.length < nTiles) {
+    console.debug({ poolSize: pool.length, nTiles, minTile, maxTile });
     pool = pool.concat(_.range(minTile, maxTile));
   }
   pool = _.shuffle(pool);
+  // console.debug("initialized pool ..");
 
-  let board: Array<Array<TileStateType>> = [];
+  let numBoard: number[][] = [];
   for (let i = 0; i < boardSize; i++) {
-    let row: Array<TileStateType> = [];
+    let row = [];
     for (let j = 0; j < boardSize; j++) {
-      row.push({
-        label: "" + pool.pop(),
-        hilite: "normal",
-        selectionIndex: -1,
-      });
+      row.push(pool.pop());
     }
-    board.push(row);
+    numBoard.push(row);
   }
-  return board;
+  // console.debug("populated numBoard ..");
+
+  let board: Array<Array<TileStateType>> = numBoard.map((row) =>
+    row.map((t) => ({
+      label: "" + t,
+      hilite: "normal",
+      selectionIndex: -1,
+    }))
+  );
+
+  // console.debug("finding solutions ..");
+  console.debug({ ALL_SUPPORTED_DIRS });
+  const solutions = findAllSolutions(numBoard, ops, ALL_SUPPORTED_DIRS);
+  // console.debug("calculated solutions ..");
+
+  let targets: number[] = _.keys(solutions)
+    .map(toNumber)
+    .sort((a, b) => solutions[b] - solutions[a]);
+
+  console.table(numBoard);
+  console.table(solutions);
+  console.debug(targets);
+
+  return { board, targets };
 }

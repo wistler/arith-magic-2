@@ -31,7 +31,7 @@
           <WhiteButton
             disabled={levelUnlocked == 0}
             on:click={() => {
-              newGame(levelUnlocked);
+              newGame(operators, levelUnlocked);
               navigateTo("GameScreen");
             }}
           >

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { persisted } from "../util/persited";
-import { makeBoard } from "../lib/game";
+import { makeBoard, Operators } from "../lib/game";
 
 export type TileHiliteType = "normal" | "hint" | "disabled";
 export type TileStateType = {
@@ -12,17 +12,22 @@ export type TileStateType = {
 export type GameBoardStateType = {
   level: number;
   board: Array<Array<TileStateType>>;
+  targets: number[];
+  solved: number[];
 };
 
-export const gameState = persisted<GameBoardStateType>("gameState", {
-  level: 0,
-  board: undefined,
-});
+export const gameState = persisted<GameBoardStateType>(
+  "gameState",
+  {} as GameBoardStateType
+);
 
-export function newGame(level: number) {
+export function newGame(ops: Operators[], level: number) {
+  const { board, targets } = makeBoard(ops, level);
   const newState: GameBoardStateType = {
     level,
-    board: makeBoard(level),
+    board,
+    targets,
+    solved: [],
   };
 
   gameState.set(newState);
