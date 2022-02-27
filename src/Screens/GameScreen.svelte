@@ -8,12 +8,14 @@
 
   let isDragging = false;
 
-  function handleMouseMove(event: MouseEvent) {
+  function handleMouseMove(event: PointerEvent) {
     if (isDragging) {
-      const dataset = (event.target as HTMLElement).parentElement.dataset;
+      const target = document.elementFromPoint(event.clientX, event.clientY);
+      // console.debug({ pointermove: event, target });
+      const dataset = (target as HTMLElement).parentElement.dataset;
       const { row, col } = dataset;
       if (row !== undefined && col !== undefined) {
-        console.debug({ row, col });
+        // console.debug({ row, col });
         // TODO: implement logic to handle selection into global store
         switch ($gameState.board[+row][+col].hilite) {
           case "normal":
@@ -42,13 +44,10 @@
 
 <Screen let:back {...$$restProps}>
   <board
-    on:mouseleave={handleMouseUp}
-    on:mousedown={() => (isDragging = true)}
-    on:mouseup={handleMouseUp}
-    on:mousemove|capture|stopPropagation={handleMouseMove}
-    on:click|capture|stopPropagation={() => {
-      console.debug("board captured click..");
-    }}
+    on:pointerleave={handleMouseUp}
+    on:pointerdown={() => (isDragging = true)}
+    on:pointerup={handleMouseUp}
+    on:pointermove={handleMouseMove}
     style="--rows: {rowCount}; --cols: {colCount};"
   >
     {#each $gameState.board as row, i}
@@ -70,9 +69,12 @@
   }
   board {
     display: grid;
-    grid-template-rows: repeat(var(--rows), 2em);
-    grid-template-columns: repeat(var(--cols), 2em);
+    /* grid-template-rows: repeat(var(--rows), minmax(auto, 2em)); */
+    grid-template-columns: repeat(var(--cols), minmax(auto, 3em));
     gap: 0.2em;
+  }
+  board > div {
+    aspect-ratio: 1;
   }
   /* board > :global(button) {
     margin: 0.1em;

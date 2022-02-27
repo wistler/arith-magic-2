@@ -26,15 +26,13 @@ export function newGame(level: number) {
   };
 
   let board: Array<Array<TileStateType>> = [];
-  let boardSize = 3;
+  let boardSize = 7;
   for (let i = 0; i < boardSize; i++) {
     let row: Array<TileStateType> = [];
     for (let j = 0; j < boardSize; j++) {
       row.push({
-        label: randomInRange(0, 9) + "",
-        hilite: ["normal", "selected", "hint", "disabled"][
-          randomInRange(0, 3)
-        ] as TileHiliteType,
+        label: "" + randomInRange(0, 9),
+        hilite: "normal",
       });
     }
     board.push(row);

@@ -19,10 +19,13 @@
     grid-template-rows: auto;
     align-items: center;
 
-    /* margin: 0.1em; */
+    /* TODO : Adjust font-size relative to tile size ?? */
+    /* font-size: 0.8em; */
+    font-size: 80%;
+
     background-color: white;
     border: none;
-    border-radius: 0.4em;
+    border-radius: 0.3em;
     box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
 
     transition: all 50ms ease-out;
