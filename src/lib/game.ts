@@ -84,6 +84,10 @@ export function getNextSelectionIndex(
 ): number {
   const activeSelection = getActiveSelection(gameState);
   console.debug({ activeSelection, next });
+  if (activeSelection.length >= 3) {
+    // HACK: Remove hardcoded size limit, and pull from ops list
+    return -1;
+  }
   if (SelectionRules[rule](activeSelection, next)) {
     return activeSelection.length + 1;
   }

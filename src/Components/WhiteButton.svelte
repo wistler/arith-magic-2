@@ -15,6 +15,8 @@
     box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
 
     transition: all 50ms ease-out;
+    white-space: nowrap;
+    font-size: 1em;
   }
 
   button:active {

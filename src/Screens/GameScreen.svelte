@@ -1,6 +1,6 @@
 <script lang="ts">
+  import TileBoard from "../Components/TileBoard.svelte";
   import { Coord, getNextSelectionIndex } from "../lib/game";
-
   import BoardTile from "../Components/BoardTile.svelte";
   import Screen from "../Components/Screen.svelte";
   import { gameState } from "../store/game";
@@ -56,12 +56,13 @@
 </script>
 
 <Screen let:back {...$$restProps}>
-  <board
+  <TileBoard
     on:pointerleave={handleMouseUp}
     on:pointerdown={() => (isDragging = true)}
     on:pointerup={handleMouseUp}
     on:pointermove={handleMouseMove}
-    style="--rows: {rowCount}; --cols: {colCount};"
+    {rowCount}
+    {colCount}
   >
     {#each $gameState.board as row, i}
       {#each row as tile, j}
@@ -73,26 +74,13 @@
         </div>
       {/each}
     {/each}
-  </board>
+  </TileBoard>
   <button on:click={back}>Back</button>
 </Screen>
 
 <style>
-  button,
-  board {
+  button {
     margin: 0.25em;
     padding: 0.25em;
   }
-  board {
-    display: grid;
-    /* grid-template-rows: repeat(var(--rows), minmax(auto, 2em)); */
-    grid-template-columns: repeat(var(--cols), minmax(auto, 3em));
-    gap: 0.2em;
-  }
-  board > div {
-    aspect-ratio: 1;
-  }
-  /* board > :global(button) {
-    margin: 0.1em;
-  } */
 </style>
