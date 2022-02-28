@@ -135,7 +135,7 @@
     justify-content: center;
     align-items: center;
 
-    border: 3px dashed green;
+    /* border: 3px dashed green; */
   }
 
   .content {
