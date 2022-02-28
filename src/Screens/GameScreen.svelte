@@ -1,9 +1,12 @@
 <script lang="ts">
+  import PuzzleBox from "./PuzzleBox.svelte";
+
   import TileBoard from "../Components/TileBoard.svelte";
   import { Coord, getNextSelectionIndex } from "../lib/game";
   import BoardTile from "../Components/BoardTile.svelte";
   import Screen from "../Components/Screen.svelte";
-  import { gameState } from "../store/game";
+  import { activeSelection, gameState } from "../store/game";
+  import WhiteButton from "../Components/WhiteButton.svelte";
 
   $: rowCount = $gameState.board.length;
   $: colCount = rowCount == 0 ? 0 : $gameState.board[0].length;
@@ -31,11 +34,14 @@
         );
         if (nextSelectionIndex === -1) return;
 
-        // TODO: implement logic to handle selection into global store
         switch ($gameState.board[+row][+col].hilite) {
           case "normal":
           case "hint":
             $gameState.board[+row][+col].selectionIndex = nextSelectionIndex;
+            $activeSelection = [
+              ...$activeSelection,
+              +$gameState.board[+row][+col].label,
+            ];
             break;
         }
       }
@@ -52,35 +58,60 @@
         }
       }
     }
+    $activeSelection = [];
   }
 </script>
 
 <Screen let:back {...$$restProps}>
-  <TileBoard
-    on:pointerleave={handleMouseUp}
-    on:pointerdown={() => (isDragging = true)}
-    on:pointerup={handleMouseUp}
-    on:pointermove={handleMouseMove}
-    {rowCount}
-    {colCount}
-  >
-    {#each $gameState.board as row, i}
-      {#each row as tile, j}
-        <div data-row={i} data-col={j}>
-          <BoardTile
-            hilite={tile.selectionIndex >= 0 ? "selected" : tile.hilite}
-            >{tile.label}</BoardTile
-          >
-        </div>
+  <spacer />
+  <!-- <targetArea>
+    <BoardTile hilite="target">
+      {$gameState.targets[0]}
+    </BoardTile>
+  </targetArea> -->
+  <PuzzleBox />
+  <board>
+    <TileBoard
+      on:pointerleave={handleMouseUp}
+      on:pointerdown={() => (isDragging = true)}
+      on:pointerup={handleMouseUp}
+      on:pointermove={handleMouseMove}
+      {rowCount}
+      {colCount}
+    >
+      {#each $gameState.board as row, i}
+        {#each row as tile, j}
+          <div data-row={i} data-col={j}>
+            <BoardTile
+              hilite={tile.selectionIndex >= 0 ? "selected" : tile.hilite}
+            >
+              {tile.label}
+            </BoardTile>
+          </div>
+        {/each}
       {/each}
-    {/each}
-  </TileBoard>
-  <button on:click={back}>Back</button>
+    </TileBoard>
+  </board>
+  <spacer />
+  <footer>
+    <WhiteButton on:click={back}>Back</WhiteButton>
+  </footer>
 </Screen>
 
 <style>
-  button {
-    margin: 0.25em;
+  board {
+    margin-top: 1em;
+  }
+  spacer {
+    flex-grow: 1;
+  }
+  footer {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     padding: 0.25em;
   }
 </style>

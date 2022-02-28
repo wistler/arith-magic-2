@@ -1,6 +1,8 @@
 <script lang="ts">
   export let rowCount: number;
   export let colCount: number;
+
+  $: width = rowCount <= 4 ? 60 : rowCount <= 6 ? 80 : 92;
 </script>
 
 <board
@@ -8,7 +10,7 @@
   on:pointerdown
   on:pointerup
   on:pointermove
-  style="--rows: {rowCount}; --cols: {colCount};"
+  style="--rows: {rowCount}; --cols: {colCount}; --width: {width}vw;"
 >
   <slot />
 </board>
@@ -19,12 +21,11 @@
     padding: 0.25em;
     min-width: 12em;
     max-width: 25em;
-    width: 60vw;
+    width: var(--width);
   }
   board {
     display: grid;
-    /* grid-template-rows: repeat(var(--rows), minmax(auto, 2em)); */
-    grid-template-columns: repeat(var(--cols), 1fr /*minmax(auto, 3em)*/);
+    grid-template-columns: repeat(var(--cols), 1fr);
     gap: 0.2em;
   }
   board > :global(div) {

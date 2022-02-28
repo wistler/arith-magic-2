@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TileHiliteType } from "../store/game";
 
-  export let hilite: TileHiliteType | "selected" = "normal";
+  export let hilite: TileHiliteType | "selected" | "target" = "normal";
 </script>
 
 <div class={hilite}>
@@ -34,6 +34,11 @@
   div:not(.disabled):not(.selected):hover {
     transform: translate3d(-0em, -0.05em, 0);
     box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.5);
+    transition: all 50ms ease-out;
+  }
+
+  div.target {
+    background-color: greenyellow;
   }
 
   div.hint {

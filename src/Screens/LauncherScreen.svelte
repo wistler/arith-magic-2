@@ -49,7 +49,7 @@
   }
 
   .logo {
-    width: 10em;
+    width: 14em;
     max-width: 80%;
     object-fit: contain;
     object-position: bottom;
@@ -62,7 +62,7 @@
     }
     100% {
       filter: drop-shadow(25px 25px 15px #222);
-      transform: translateY(-4%);
+      transform: translate3d(0, -4%, 0);
     }
   }
 </style>

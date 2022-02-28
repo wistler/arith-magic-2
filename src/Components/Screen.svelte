@@ -115,7 +115,7 @@
     background-color: white;
     border-radius: 1em;
     opacity: 0;
-    transform: scale(0.9) translateY(10%);
+    transform: scale(0.9) translate3d(0, 10%, 0);
   }
 
   screen {
