@@ -5,6 +5,21 @@
 
   import { SCREENS } from "./Screens";
   import { navStack } from "./store/navigation";
+  import { onMount } from "svelte";
+
+  onMount(() => {
+    document.documentElement.style.setProperty(
+      "--window-height",
+      `${window.innerHeight}px`
+    );
+  });
+
+  window.addEventListener("resize", () => {
+    document.documentElement.style.setProperty(
+      "--window-height",
+      `${window.innerHeight}px`
+    );
+  });
 </script>
 
 <main style="background-image: url({bg});">
@@ -14,6 +29,7 @@
     screenList={SCREENS}
     rootScreenKey="LauncherScreen"
   />
+  <!-- Footer: <Header /> -->
 </main>
 
 <style>
@@ -24,7 +40,7 @@
 
   main {
     user-select: none;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     overflow: hidden;
     text-align: center;

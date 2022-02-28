@@ -1,18 +1,28 @@
 html, body {
 	position: relative;
-	width: 100%;
-	height: 100%;
+	width: 1fr;
+	height: 1fr;
+	height: var(--window-height);
 }
 
 body {
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: auto;
+
 	color: #333;
 	margin: 0;
 	overflow: hidden;
-	box-sizing: border-box;
+	box-sizing: content-box;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 * {
-	font-size: 1.1em;
+	/* 
+	 This font-size acts as global zoom factor for entire game. 
+	 Everything is based off this referenc value. 
+	*/
+	font-size: 0.7cm; 
+
 	user-select: none;
 }

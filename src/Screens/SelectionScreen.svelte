@@ -13,6 +13,8 @@
   let listing = getListing();
 </script>
 
+<!-- TODO: Re-imaging layout for tablet setups -->
+<!-- TODO: Re-imaging layout for PC/keyboard/mouse setups -->
 <Screen let:navigateTo let:back {...$$restProps}>
   <list-box>
     <list>
@@ -35,20 +37,27 @@
 
 <style>
   list-box {
+    border: 1px solid purple;
     flex: 1;
     height: 100%;
     overflow: hidden;
+
+    /* TODO width 100% works for portrait, not for landscape */
+    width: 100%;
+    /* max-width: 20em; */
   }
   list {
-    font-size: 0.8em;
     display: flex;
     flex-direction: column;
-    width: 100%;
     height: 100%;
     overflow-y: scroll;
+    overflow-x: hidden;
     scroll-behavior: smooth;
+
     /* TODO: Hide scrollbar in Desktop Mode */
-    box-sizing: content-box;
-    padding-right: 50px;
+    /* box-sizing: content-box;
+    margin-right: -25px;
+    margin-left: 7px;
+    padding-right: 25px; */
   }
 </style>

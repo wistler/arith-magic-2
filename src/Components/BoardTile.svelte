@@ -21,7 +21,7 @@
 
     /* TODO : Adjust font-size relative to tile size ?? */
     /* font-size: 0.8em; */
-    font-size: 80%;
+    /* font-size: 80%; */
 
     background-color: white;
     border: none;

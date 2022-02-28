@@ -80,6 +80,7 @@
     justify-content: space-between;
   }
   drawer {
+    border: 1px solid blue;
     background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
 
@@ -89,14 +90,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* width: 50%; */
-    margin-right: -0.3em;
+    /* width: 100%; */
+    /* margin-right: -0.3em; */
     padding: 0;
   }
   operators {
-    /* grid-column: span 2; */
-    padding: 0.3em 0em 0em 0.2em;
-    border-radius: 0.4em;
+    border: 1px solid red;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* padding: 0.3em 0em 0em 0.2em; */
     text-align: left;
   }
   operators img {
