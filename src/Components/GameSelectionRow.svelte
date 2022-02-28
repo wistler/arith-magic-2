@@ -80,9 +80,8 @@
     justify-content: space-between;
   }
   drawer {
-    border: 1px solid blue;
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
     border-radius: 0.5em;
     margin: 0.3em;
@@ -95,10 +94,9 @@
     padding: 0;
   }
   operators {
-    border: 1px solid red;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* padding: 0.3em 0em 0em 0.2em; */
+    margin-left: 0.25em;
     text-align: left;
   }
   operators img {

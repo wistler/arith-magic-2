@@ -37,7 +37,6 @@
 
 <style>
   list-box {
-    border: 1px solid purple;
     flex: 1;
     height: 100%;
     overflow: hidden;
