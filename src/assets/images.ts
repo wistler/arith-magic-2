@@ -5,7 +5,7 @@ import operatorMinusGrey from "./Images/operator-minus-grey.png";
 import operatorTimes from "./Images/operator-cross.png";
 import operatorTimesGrey from "./Images/operator-cross-grey.png";
 import operatorEquals from "./Images/operator-equals.png";
-import operatorEqualsGrey from "./Images/operator-equals.png";
+import operatorEqualsGrey from "./Images/operator-equals-grey.png";
 import grid from "./Images/grid.png";
 
 const Images = {

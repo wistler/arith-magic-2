@@ -63,8 +63,10 @@ const OperatorRules: Record<Operators, (a: number, b: number) => number> = {
 
 export type SelectionRuleTypes = keyof typeof SelectionRules;
 
-function getActiveSelection(gameState: GameBoardStateType): Coord[] {
-  return gameState.board
+export function getActiveSelection(
+  board: GameBoardStateType["board"]
+): Coord[] {
+  return board
     .flatMap((row, i) => {
       return row
         .map((t, j) => ({ t, coord: { row: i, col: j } }))
@@ -82,10 +84,9 @@ export function getNextSelectionIndex(
   next: Coord,
   rule: SelectionRuleTypes
 ): number {
-  const activeSelection = getActiveSelection(gameState);
+  const activeSelection = getActiveSelection(gameState.board);
   console.debug({ activeSelection, next });
-  if (activeSelection.length >= 3) {
-    // HACK: Remove hardcoded size limit, and pull from ops list
+  if (activeSelection.length > gameState.operators.length) {
     return -1;
   }
   if (SelectionRules[rule](activeSelection, next)) {
@@ -117,6 +118,32 @@ function isCoordInRange(matrix: number[][], coord: Coord) {
     coord.row < matrix.length &&
     coord.col < matrix[0].length
   );
+}
+
+function solve(sel: number[], ops: Operators[]): number {
+  if (sel.length !== 3 && ops.length !== 2)
+    throw Error("Solver only implemented for 3-term expressions.");
+
+  let sol;
+  if (ops[1] === "*") {
+    sol = OperatorRules[ops[0]](sel[0], OperatorRules[ops[1]](sel[1], sel[2]));
+  } else {
+    sol = OperatorRules[ops[1]](OperatorRules[ops[0]](sel[0], sel[1]), sel[2]);
+  }
+  console.debug(
+    `solver: ${sel[0]} ${ops[0]} ${sel[1]} ${ops[1]} ${sel[2]} = ${sol}`
+  );
+  return sol;
+}
+
+export function checkAnswer(
+  selection: number[],
+  ops: Operators[],
+  target: number
+): boolean {
+  if (selection.length !== ops.length + 1) return false;
+
+  return solve(selection, ops) === target;
 }
 
 function findAllSolutions(

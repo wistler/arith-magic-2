@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TileHiliteType } from "../store/game";
 
-  export let hilite: TileHiliteType | "selected" | "target" = "normal";
+  export let hilite: TileHiliteType = "normal";
 </script>
 
 <div class={hilite}>
@@ -18,12 +18,14 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     align-items: center;
+    contain: content;
 
     /* TODO : Adjust font-size relative to tile size ?? */
     /* font-size: 0.8em; */
     /* font-size: 80%; */
 
     background-color: white;
+    background-size: contain;
     border: none;
     border-radius: 0.3em;
     box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
@@ -41,15 +43,19 @@
     background-color: greenyellow;
   }
 
+  div.incorrect {
+    background-color: tomato;
+  }
+
   div.hint {
     background-color: khaki;
   }
 
   /* div:not(.disabled):active, */
   div.selected {
-    background-color: aqua;
+    background-color: cornflowerblue;
     transform: translate3d(0, 0, 0);
-    box-shadow: 2px 2px 2px rgb(42, 188, 255);
+    /* box-shadow: 2px 2px 2px rgb(42, 188, 255); */
     /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 1); */
   }
 

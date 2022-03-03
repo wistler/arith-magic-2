@@ -1,92 +1,100 @@
 <script lang="ts">
-  import PuzzleBox from "./PuzzleBox.svelte";
-
+  import {
+    addToSelection,
+    gameState,
+    isSelectionCorrect,
+    removeFromSelection,
+    selectionMade,
+    validateSelection,
+  } from "../store/game";
+  import PuzzleBox from "../Components/PuzzleBox.svelte";
   import TileBoard from "../Components/TileBoard.svelte";
-  import { Coord, getNextSelectionIndex } from "../lib/game";
-  import BoardTile from "../Components/BoardTile.svelte";
+  import Tile from "../Components/Tile.svelte";
   import Screen from "../Components/Screen.svelte";
-  import { activeSelection, gameState } from "../store/game";
   import WhiteButton from "../Components/WhiteButton.svelte";
+  import { getActiveSelection } from "../lib/game";
 
-  $: rowCount = $gameState.board.length;
-  $: colCount = rowCount == 0 ? 0 : $gameState.board[0].length;
+  $: ({ board } = $gameState);
+  $: rowCount = board.length;
+  $: colCount = rowCount == 0 ? 0 : board[0].length;
 
   let isDragging = false;
 
-  function handleMouseMove(event: PointerEvent) {
-    if (isDragging) {
-      const target = document.elementFromPoint(event.clientX, event.clientY);
-      // console.debug({ pointermove: event, target });
-      const dataset = (target as HTMLElement).parentElement.dataset;
-      const { row, col } = dataset;
-      if (row !== undefined && col !== undefined) {
-        // console.debug({ row, col });
+  function handlePointerMove(event: PointerEvent) {
+    if (!isDragging || $isSelectionCorrect.complete) {
+      return;
+    }
 
-        const next: Coord = { row: +row, col: +col };
-        if ($gameState.board[+row][+col].selectionIndex >= 0) {
-          return;
-        }
+    const target = document.elementFromPoint(event.clientX, event.clientY);
+    // TODO only process target if we swype through the center
 
-        const nextSelectionIndex = getNextSelectionIndex(
-          $gameState,
-          next,
-          "linear"
-        );
-        if (nextSelectionIndex === -1) return;
+    // console.debug({ pointermove: event, target });
+    const dataset = (target as HTMLElement).parentElement.dataset;
+    const { row, col } = dataset;
+    if (row !== undefined && col !== undefined) {
+      if (board[row][col].selectionIndex == -1) {
+        addToSelection({ row: +row, col: +col });
+      } else {
+        let irow = +row;
+        let icol = +col;
 
-        switch ($gameState.board[+row][+col].hilite) {
-          case "normal":
-          case "hint":
-            $gameState.board[+row][+col].selectionIndex = nextSelectionIndex;
-            $activeSelection = [
-              ...$activeSelection,
-              +$gameState.board[+row][+col].label,
-            ];
-            break;
+        const chain = getActiveSelection(board);
+        if (chain.length < 2) return;
+
+        const lastButOne = chain.at(-2);
+        const last = chain.at(-1);
+
+        // console.debug({ row, col, lastButOne, last });
+        if (lastButOne.row === irow && lastButOne.col === icol) {
+          removeFromSelection({ ...last });
         }
       }
     }
   }
-  function handleMouseUp() {
-    isDragging = false;
 
-    for (let i = 0; i < $gameState.board.length; i++) {
-      const row = $gameState.board[i];
-      for (let j = 0; j < row.length; j++) {
-        if ($gameState.board[i][j].selectionIndex >= 0) {
-          $gameState.board[i][j].selectionIndex = -1;
-        }
-      }
+  function handlePointerUp() {
+    if (isDragging && !$selectionMade) {
+      isDragging = false;
+      $selectionMade = true;
     }
-    $activeSelection = [];
   }
 </script>
 
 <Screen let:back {...$$restProps}>
   <spacer />
   <!-- <targetArea>
-    <BoardTile hilite="target">
+    <Tile hilite="target">
       {$gameState.targets[0]}
-    </BoardTile>
+    </Tile>
   </targetArea> -->
   <PuzzleBox />
   <board>
     <TileBoard
-      on:pointerleave={handleMouseUp}
-      on:pointerdown={() => (isDragging = true)}
-      on:pointerup={handleMouseUp}
-      on:pointermove={handleMouseMove}
+      on:pointerdown={() => {
+        if ($selectionMade === false) {
+          isDragging = true;
+        }
+      }}
+      on:pointermove={handlePointerMove}
+      on:pointerup={handlePointerUp}
+      on:pointerleave={handlePointerUp}
       {rowCount}
       {colCount}
     >
-      {#each $gameState.board as row, i}
+      {#each board as row, i}
         {#each row as tile, j}
           <div data-row={i} data-col={j}>
-            <BoardTile
-              hilite={tile.selectionIndex >= 0 ? "selected" : tile.hilite}
+            <Tile
+              hilite={tile.selectionIndex == -1
+                ? tile.hilite
+                : $isSelectionCorrect.complete === false
+                ? "selected"
+                : $isSelectionCorrect.correct
+                ? "target"
+                : "incorrect"}
             >
               {tile.label}
-            </BoardTile>
+            </Tile>
           </div>
         {/each}
       {/each}
@@ -94,7 +102,7 @@
   </board>
   <spacer />
   <footer>
-    <WhiteButton on:click={back}>Back</WhiteButton>
+    <WhiteButton on:click={back}>Exit</WhiteButton>
   </footer>
 </Screen>
 

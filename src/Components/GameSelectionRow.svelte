@@ -13,7 +13,7 @@
   import Images, { OperatorIcons } from "../assets/images";
   import WhiteButton from "./WhiteButton.svelte";
   import TileBoard from "./TileBoard.svelte";
-  import BoardTile from "./BoardTile.svelte";
+  import Tile from "./Tile.svelte";
 
   export let operators: Operators[];
   export let levelUnlocked: number;
@@ -62,9 +62,9 @@
     <TileBoard rowCount={levelUnlocked / 5} colCount={5}>
       {#each _.range(1, levelUnlocked + 1) as level}
         <div on:click={() => dispatcher("startGame", { level })}>
-          <BoardTile>
+          <Tile>
             {level}
-          </BoardTile>
+          </Tile>
         </div>
       {/each}
     </TileBoard>
