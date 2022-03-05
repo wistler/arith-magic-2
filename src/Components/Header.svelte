@@ -5,7 +5,7 @@
   };
 </script>
 
-<header>Header Content</header>
+<header>ArithMagic</header>
 
 <style>
   header {

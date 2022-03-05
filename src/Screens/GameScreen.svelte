@@ -28,7 +28,7 @@
   $: rowCount = board.length;
   $: colCount = rowCount == 0 ? 0 : board[0].length;
 
-  const HACKS_ENABLED = true; // HACK: Move to .env file !
+  const HACKS_ENABLED = false; // HACK: Move to .env file !
 
   function handlePointerMove(event: PointerEvent) {
     if (!$isSelectionInProgress || $isSelectionCorrect.complete) {

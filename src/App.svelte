@@ -23,7 +23,9 @@
 </script>
 
 <main style="background-image: url({bg});">
-  <Header />
+  {#if $navStack.at(-1) !== "LauncherScreen"}
+    <Header />
+  {/if}
   <ScreenNavigator
     bind:stack={$navStack}
     screenList={SCREENS}
