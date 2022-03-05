@@ -10,7 +10,7 @@
   import { createEventDispatcher } from "svelte";
 
   import type { Operators } from "../lib/game";
-  import Images, { OperatorIcons } from "../assets/Images";
+  import { OperatorIcons } from "../assets/Images";
   import WhiteButton from "./WhiteButton.svelte";
   import TileBoard from "./TileBoard.svelte";
   import Tile from "./Tile.svelte";

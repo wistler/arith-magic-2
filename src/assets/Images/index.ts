@@ -1,12 +1,12 @@
-import operatorPlus from "./Images/operator-plus.png";
-import operatorPlusGrey from "./Images/operator-plus-grey.png";
-import operatorMinus from "./Images/operator-minus.png";
-import operatorMinusGrey from "./Images/operator-minus-grey.png";
-import operatorTimes from "./Images/operator-cross.png";
-import operatorTimesGrey from "./Images/operator-cross-grey.png";
-import operatorEquals from "./Images/operator-equals.png";
-import operatorEqualsGrey from "./Images/operator-equals-grey.png";
-import grid from "./Images/grid.png";
+import operatorPlus from "./operator-plus.png";
+import operatorPlusGrey from "./operator-plus-grey.png";
+import operatorMinus from "./operator-minus.png";
+import operatorMinusGrey from "./operator-minus-grey.png";
+import operatorTimes from "./operator-cross.png";
+import operatorTimesGrey from "./operator-cross-grey.png";
+import operatorEquals from "./operator-equals.png";
+import operatorEqualsGrey from "./operator-equals-grey.png";
+import grid from "./grid.png";
 
 const Images = {
   operatorPlus,
