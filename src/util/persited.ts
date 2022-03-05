@@ -2,8 +2,8 @@ import _ from "lodash";
 import { writable, Writable } from "svelte/store";
 
 function mergeState(hydrated: any, def: any): any {
-  if (_.isArray(def) || _.isString(def)) {
-    return hydrated || def;
+  if (_.isArray(def) || _.isString(def) || _.isNumber(def) || _.isBoolean(def)) {
+    return hydrated !== undefined && hydrated !== null ? hydrated : def;
   }
   return { ...def, ...hydrated };
 }

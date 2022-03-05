@@ -1,17 +1,17 @@
 <script lang="ts">
   import { writable } from "svelte/store";
-  import { ConfettiExplosion } from "svelte-confetti-explosion";
   import Tile from "./Tile.svelte";
   import {
     activeSelection,
     gameState,
     isSelectionCorrect,
-    selectionMade,
+    isSelectionInProgress,
     target,
     TileHiliteType,
     validateSelection,
   } from "../store/game";
   import { OperatorIcons } from "../assets/Images";
+  import { CheckMarkIcon } from "../lib/icons";
 
   $: ({ operators } = $gameState);
 
@@ -28,21 +28,21 @@
 
   let afterAnimation: () => void;
   $: {
-    const sm = $selectionMade;
-    if (sm) {
+    const selectionInProgress = $isSelectionInProgress;
+    if (!selectionInProgress) {
       ({ complete, correct, afterAnimation } = validateSelection());
-      console.debug({ sm, complete, correct, afterAnimation });
+      // console.debug({ selectionInProgress, complete, correct, afterAnimation });
       if (complete) {
         if (correct) {
           $showConfetti = true;
           setTimeout(() => {
             $showConfetti = false;
             afterAnimation();
-          }, 3000);
+          }, 2000);
         } else {
           setTimeout(() => {
             afterAnimation();
-          }, 1000);
+          }, 500);
         }
       }
     }
@@ -56,12 +56,9 @@
   $: hilite_3 = calcHilite($activeSelection[2], correct);
 </script>
 
-{#if $showConfetti}
-  <ConfettiExplosion duration={4000} />
-{/if}
 <puzzleBox>
   <div>
-    <Tile hilite={hilite_1}>
+    <Tile hilite={hilite_1} flat={hilite_1 === "normal"}>
       {$activeSelection[0] || "?"}
     </Tile>
   </div>
@@ -74,7 +71,7 @@
     alt={operators[0]}
   />
 
-  <Tile hilite={hilite_2}>
+  <Tile hilite={hilite_2} flat={hilite_2 === "normal"}>
     {$activeSelection[1] || "?"}
   </Tile>
 
@@ -86,7 +83,7 @@
     alt={operators[1]}
   />
 
-  <Tile hilite={hilite_3}>
+  <Tile hilite={hilite_3} flat={hilite_3 === "normal"}>
     {$activeSelection[2] || "?"}
   </Tile>
 
@@ -96,7 +93,11 @@
   />
 
   <Tile hilite="target">
-    {$target}
+    {#if $target}
+      {$target}
+    {:else}
+      <CheckMarkIcon />
+    {/if}
   </Tile>
 </puzzleBox>
 

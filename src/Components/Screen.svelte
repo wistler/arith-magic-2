@@ -45,22 +45,27 @@
     // resume any animations
     console.debug(`${screenKey} prepareToUnhide..`);
     console.debug(`${screenKey} resuming animations..`);
-    screen
-      ?.querySelectorAll("[data-animation]")
-      .forEach((e: HTMLElement) => (e.style.animationPlayState = "running"));
+    screen?.querySelectorAll("[data-animation]").forEach((e: HTMLElement) => {
+      console.log(e);
+      e.style.animationPlayState = "running";
+    });
   }
 
   function hidden() {
     // pause any animations
     console.debug(`${screenKey} hidden..`);
-    screen
-      ?.querySelectorAll("[data-animation]")
-      .forEach((e: HTMLElement) => (e.style.animationPlayState = "paused"));
+    screen?.querySelectorAll("[data-animation]").forEach((e: HTMLElement) => {
+      console.log(e);
+      e.style.animationPlayState = "paused";
+    });
     console.debug(`${screenKey} paused animations..`);
   }
 
   onMount(() => {
     console.debug(`${screenKey} mounted..`);
+    if (!onTop) {
+      hidden();
+    }
   });
 
   onDestroy(() => {

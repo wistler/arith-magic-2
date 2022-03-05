@@ -1,8 +1,11 @@
 <script lang="ts">
   export let disabled: boolean = undefined;
+  export let flat: boolean = false;
 </script>
 
-<button {disabled} on:click><slot /></button>
+<button {disabled} on:click style="{flat ? 'box-shadow: none' : ''};"
+  ><slot /></button
+>
 
 <style>
   button {

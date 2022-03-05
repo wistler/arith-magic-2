@@ -3,14 +3,19 @@
 </script>
 
 <script lang="ts">
+  import { ExitSessionIcon } from "../lib/icons";
   import GameSelectionRow from "../Components/GameSelectionRow.svelte";
 
   import Screen from "../Components/Screen.svelte";
   import WhiteButton from "../Components/WhiteButton.svelte";
   import { newGame } from "../store/game";
-  import { getListing } from "../store/profile";
+  import { getListing, levels } from "../store/profile";
 
   let listing = getListing();
+  levels.subscribe(() => {
+    console.debug("Levels store changed, updating listing..");
+    listing = getListing();
+  });
 </script>
 
 <!-- TODO: Re-imaging layout for tablet setups -->
@@ -31,7 +36,7 @@
     </list>
   </list-box>
   <div>
-    <WhiteButton on:click={back}>Back</WhiteButton>
+    <WhiteButton on:click={back}><ExitSessionIcon /></WhiteButton>
   </div>
 </Screen>
 
@@ -43,7 +48,7 @@
 
     /* TODO width 100% works for portrait, not for landscape */
     width: 100%;
-    /* max-width: 20em; */
+    max-width: 25em;
   }
   list {
     display: flex;

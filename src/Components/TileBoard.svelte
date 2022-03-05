@@ -2,7 +2,13 @@
   export let rowCount: number;
   export let colCount: number;
 
-  $: width = rowCount <= 4 ? 60 : rowCount <= 6 ? 80 : 92;
+  // HACK: Yuck ! Sizing !! Almost like media queries !!!
+  export let width =
+    colCount <= 2 ? 40 : colCount <= 4 ? 60 : colCount <= 6 ? 80 : 92;
+  let minWidth =
+    colCount <= 2 ? 5 : colCount <= 4 ? 8 : colCount <= 6 ? 11 : 12;
+  let maxWidth =
+    colCount <= 2 ? 8 : colCount <= 4 ? 12 : colCount <= 6 ? 20 : 25;
 </script>
 
 <board
@@ -10,7 +16,7 @@
   on:pointerdown
   on:pointerup
   on:pointermove
-  style="--rows: {rowCount}; --cols: {colCount}; --width: {width}vw;"
+  style="--rows: {rowCount}; --cols: {colCount}; --width: {width}%; --min-width: {minWidth}em;--max-width: {maxWidth}em;"
 >
   <slot />
 </board>
@@ -19,8 +25,9 @@
   board {
     margin: 0.25em;
     padding: 0.25em;
-    min-width: 12em;
-    max-width: 25em;
+    /* min-width: 12em; */
+    min-width: var(--min-width);
+    max-width: var(--max-width);
     width: var(--width);
   }
   board {

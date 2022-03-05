@@ -29,9 +29,12 @@ function scale(c1: Coord, s: number): Coord {
 
 const SelectionRules = {
   linear: function (active: Coord[], next: Coord) {
-    if (active.length < 2) return true;
+    if (active.length === 0) return true;
+    const currDelta = diff(active.at(-1), next)
+    const isNeighbor = (Math.abs(currDelta.row) <= 1 && Math.abs(currDelta.col) <= 1)
+    if (active.length === 1) return isNeighbor;
     if (
-      _.isEqual(diff(active.at(-2), active.at(-1)), diff(active.at(-1), next))
+      _.isEqual(diff(active.at(-2), active.at(-1)), currDelta)
     ) {
       return true;
     }
@@ -85,7 +88,7 @@ export function getNextSelectionIndex(
   rule: SelectionRuleTypes
 ): number {
   const activeSelection = getActiveSelection(gameState.board);
-  console.debug({ activeSelection, next });
+  // console.debug({ activeSelection, next });
   if (activeSelection.length > gameState.operators.length) {
     return -1;
   }
@@ -99,6 +102,7 @@ export function getBoardSpec(level: number) {
   let boardSize = 7;
   let minTile = 0;
   let maxTile = 9;
+  let howManyTargets = 5;
 
   if (level <= 3) boardSize = 3;
   else if (level <= 6) boardSize = 4;
@@ -108,7 +112,7 @@ export function getBoardSpec(level: number) {
   minTile = Math.max(level - 3, 0);
   maxTile = Math.max(9 + level - 3, 9);
 
-  return { boardSize, minTile, maxTile };
+  return { boardSize, minTile, maxTile, howManyTargets };
 }
 
 function isCoordInRange(matrix: number[][], coord: Coord) {
@@ -188,26 +192,54 @@ export function makeBoard(
   ops: Operators[],
   level: number
 ): { board: TileStateType[][]; targets: number[] } {
-  let { boardSize, minTile, maxTile } = getBoardSpec(level);
+  let { boardSize, minTile, maxTile, howManyTargets } = getBoardSpec(level);
 
   let nTiles = boardSize * boardSize;
-  let pool = [];
-  while (pool.length < nTiles) {
-    console.debug({ poolSize: pool.length, nTiles, minTile, maxTile });
-    pool = pool.concat(_.range(minTile, maxTile));
-  }
-  pool = _.shuffle(pool);
-  // console.debug("initialized pool ..");
+  let numBoard: number[][]
+  let targets: number[];
 
-  let numBoard: number[][] = [];
-  for (let i = 0; i < boardSize; i++) {
-    let row = [];
-    for (let j = 0; j < boardSize; j++) {
-      row.push(pool.pop());
+  let iterations = 0;
+  do {
+    let pool = [];
+    while (pool.length < nTiles) {
+      console.debug({ poolSize: pool.length, nTiles, minTile, maxTile });
+      pool = pool.concat(_.range(minTile, maxTile));
     }
-    numBoard.push(row);
-  }
-  // console.debug("populated numBoard ..");
+    pool = _.shuffle(pool);
+
+    numBoard = [];
+    for (let i = 0; i < boardSize; i++) {
+      let row = [];
+      for (let j = 0; j < boardSize; j++) {
+        row.push(pool.pop());
+      }
+      numBoard.push(row);
+    }
+    // console.debug({ ALL_SUPPORTED_DIRS });
+    const solutions = findAllSolutions(numBoard, ops, ALL_SUPPORTED_DIRS);
+
+    targets = _.keys(solutions)
+      .map(toNumber)
+      .sort((a, b) => solutions[b] - solutions[a])
+      .slice(0, howManyTargets)
+
+    iterations++
+
+    if (targets.length === howManyTargets) {
+      console.debug(`Prepared puzzle in ${iterations} iteration(s).`)
+      break;
+    }
+
+    console.warn(`Iteration: ${iterations}`)
+    console.table(numBoard);
+    console.table(solutions);
+
+    if (iterations > 10) {
+      console.error(`Could not prepare puzzle within iteration limit.`)
+      break;
+    }
+
+  } while (true);
 
   let board: Array<Array<TileStateType>> = numBoard.map((row) =>
     row.map((t) => ({
@@ -216,19 +248,6 @@ export function makeBoard(
       selectionIndex: -1,
     }))
   );
-
-  // console.debug("finding solutions ..");
-  console.debug({ ALL_SUPPORTED_DIRS });
-  const solutions = findAllSolutions(numBoard, ops, ALL_SUPPORTED_DIRS);
-  // console.debug("calculated solutions ..");
-
-  let targets: number[] = _.keys(solutions)
-    .map(toNumber)
-    .sort((a, b) => solutions[b] - solutions[a]);
-
-  console.table(numBoard);
-  console.table(solutions);
-  console.debug(targets);
 
   return { board, targets };
 }

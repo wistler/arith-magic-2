@@ -2,9 +2,10 @@
   import type { TileHiliteType } from "../store/game";
 
   export let hilite: TileHiliteType = "normal";
+  export let flat: boolean = false;
 </script>
 
-<div class={hilite}>
+<div class={hilite} style="{flat ? 'box-shadow: none' : ''};">
   <slot />
 </div>
 
@@ -18,6 +19,7 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     align-items: center;
+    justify-content: center;
     contain: content;
 
     /* TODO : Adjust font-size relative to tile size ?? */

@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { derived, get, writable } from "svelte/store";
 import { persisted } from "../util/persited";
 import {
   checkAnswer,
@@ -8,7 +9,8 @@ import {
   makeBoard,
   Operators,
 } from "../lib/game";
-import { derived, get, writable } from "svelte/store";
+
+//////////// TYPES //////////////////
 
 export type TileHiliteType =
   | "normal"
@@ -17,6 +19,7 @@ export type TileHiliteType =
   | "selected"
   | "target"
   | "incorrect";
+
 export type TileStateType = {
   label: string;
   hilite: TileHiliteType;
@@ -31,13 +34,31 @@ export type GameBoardStateType = {
   solved: number[];
 };
 
+////////////////// STATE /////////////////
+
 export const gameState = persisted<GameBoardStateType>(
   "gameState",
   {} as GameBoardStateType
 );
 
 export const activeSelection = writable([] as number[]);
-export const selectionMade = writable(false);
+export const isSelectionInProgress = writable(false);
+
+export const target = derived(gameState, ({ targets, solved }) => {
+  return targets[solved.length];
+});
+
+export const isSelectionCorrect = writable({
+  complete: false,
+  correct: false,
+});
+
+export const isGameOver = derived(gameState, ($gameState => {
+  let { solved, targets } = $gameState;
+  return targets != undefined && _.isEqual(solved, targets);
+}))
+
+//////////////////// ACTIONS //////////////////
 
 export function newGame(ops: Operators[], level: number) {
   const { board, targets } = makeBoard(ops, level);
@@ -51,15 +72,6 @@ export function newGame(ops: Operators[], level: number) {
 
   gameState.set(newState);
 }
-
-export const target = derived(gameState, ({ targets, solved }) => {
-  return targets[solved.length];
-});
-
-export const isSelectionCorrect = writable({
-  complete: false,
-  correct: false,
-});
 
 export function addToSelection({ row, col }: Coord) {
   const next: Coord = { row, col };
@@ -120,18 +132,22 @@ export function removeFromSelection({ row, col }: Coord) {
  *
  * Because the timing itself should be UI's responsibility, we'll
  * return a function that needs to be run next.
+ * 
+ * Also, because isSelectionCorrect is set before exiting fn, it's
+ * not simple querying for it again, and the data could be stale,
+ * so, we'll pass back the new data in the call return.
  */
 export function validateSelection():
   | {
-      complete: false;
-      correct?: undefined;
-      afterAnimation?: undefined;
-    }
+    complete: false;
+    correct?: undefined;
+    afterAnimation?: undefined;
+  }
   | {
-      complete: true;
-      correct: boolean;
-      afterAnimation: () => void;
-    } {
+    complete: true;
+    correct: boolean;
+    afterAnimation: () => void;
+  } {
   const $gameState = get(gameState);
   const $activeSelection = get(activeSelection);
   const $target = get(target);
@@ -153,8 +169,18 @@ export function validateSelection():
     correct,
     afterAnimation() {
       clearSelection();
+      if (correct) {
+        targetSolved();
+      }
     },
   };
+}
+
+///////////////// INTERNAL ACTIONS /////////////////
+
+function targetSolved() {
+  const $gameState = get(gameState);
+  gameState.set({ ...$gameState, solved: [...$gameState.solved, get(target)] })
 }
 
 function clearSelection() {
@@ -171,6 +197,6 @@ function clearSelection() {
   }
   gameState.set({ ...$gameState, board });
   activeSelection.set([]);
-  selectionMade.set(false);
+  isSelectionInProgress.set(false);
   isSelectionCorrect.set({ complete: false, correct: false });
 }

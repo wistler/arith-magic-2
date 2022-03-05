@@ -10,10 +10,11 @@
   import { createEventDispatcher } from "svelte";
 
   import type { Operators } from "../lib/game";
-  import Images, { OperatorIcons } from "../assets/images";
+  import Images, { OperatorIcons } from "../assets/Images";
   import WhiteButton from "./WhiteButton.svelte";
   import TileBoard from "./TileBoard.svelte";
   import Tile from "./Tile.svelte";
+  import { EnterArrowIcon, GridIcon } from "../lib/icons";
 
   export let operators: Operators[];
   export let levelUnlocked: number;
@@ -35,6 +36,7 @@
     </operators>
     <div>
       <WhiteButton
+        flat
         disabled={levelUnlocked <= 1}
         on:click={() => {
           if ($drawerOpen === me) {
@@ -44,22 +46,27 @@
           }
         }}
       >
-        <img src={Images.grid} alt="grid" style="width: 1em" />
+        <GridIcon style="margin-bottom: -0.2em;" />
       </WhiteButton>
     </div>
     <div>
       <WhiteButton
+        flat
         disabled={levelUnlocked == 0}
         on:click={() => {
           dispatcher("startGame", { level: levelUnlocked });
         }}
       >
-        Lv {levelUnlocked} >
+        Lv {levelUnlocked}
+        <EnterArrowIcon style="margin-bottom: -0.2em;" />
       </WhiteButton>
     </div>
   </row>
   {#if $drawerOpen === me}
-    <TileBoard rowCount={levelUnlocked / 5} colCount={5}>
+    <TileBoard
+      rowCount={levelUnlocked / 5}
+      colCount={Math.min(levelUnlocked, 5)}
+    >
       {#each _.range(1, levelUnlocked + 1) as level}
         <div on:click={() => dispatcher("startGame", { level })}>
           <Tile>

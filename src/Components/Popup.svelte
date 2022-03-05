@@ -29,7 +29,7 @@
 <style>
   blanket {
     position: absolute;
-    background-color: rgba(#000000, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
 
     user-select: none;
     height: 100%;
@@ -39,20 +39,32 @@
     text-align: center;
     margin: 0 auto;
 
-    display: grid;
-    grid-template-columns: auto minmax(40%, auto) auto;
-    grid-template-rows: auto minmax(20%, auto) auto;
+    /* display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto; */
+
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    /* align-content: center; */
+    justify-content: center;
   }
 
   popup {
-    grid-row: 2;
-    grid-column: 2;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 1em;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* border: 1px solid black; */
+    border-radius: 0.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    padding: 0 5% 10% 5%;
+    min-width: 12em;
+    max-width: 27em;
+
+    width: 70%;
+    height: 70%;
+    margin: 0;
+    /* padding: 0 5% 10% 5%; */
   }
 </style>

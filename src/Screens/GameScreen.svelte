@@ -2,10 +2,10 @@
   import {
     addToSelection,
     gameState,
+    isGameOver,
     isSelectionCorrect,
     removeFromSelection,
-    selectionMade,
-    validateSelection,
+    isSelectionInProgress,
   } from "../store/game";
   import PuzzleBox from "../Components/PuzzleBox.svelte";
   import TileBoard from "../Components/TileBoard.svelte";
@@ -13,15 +13,25 @@
   import Screen from "../Components/Screen.svelte";
   import WhiteButton from "../Components/WhiteButton.svelte";
   import { getActiveSelection } from "../lib/game";
+  import Popup from "../Components/Popup.svelte";
+  import { ConfettiExplosion } from "svelte-confetti-explosion";
+  import { delay } from "../util/delay";
+  import { onMount } from "svelte";
+  import {
+    EnterArrowIcon,
+    ExitSessionIcon,
+    HackIcon,
+    PauseIcon,
+  } from "../lib/icons";
 
   $: ({ board } = $gameState);
   $: rowCount = board.length;
   $: colCount = rowCount == 0 ? 0 : board[0].length;
 
-  let isDragging = false;
+  const HACKS_ENABLED = true; // HACK: Move to .env file !
 
   function handlePointerMove(event: PointerEvent) {
-    if (!isDragging || $isSelectionCorrect.complete) {
+    if (!$isSelectionInProgress || $isSelectionCorrect.complete) {
       return;
     }
 
@@ -53,11 +63,41 @@
   }
 
   function handlePointerUp() {
-    if (isDragging && !$selectionMade) {
-      isDragging = false;
-      $selectionMade = true;
+    $isSelectionInProgress = false;
+  }
+
+  // local component ui states
+  let showConfetti = false;
+  let showGameOverPopup = false;
+  // let showPauseMenuPopup = false;
+  let mounted = false;
+  let isPaused = false;
+
+  async function animateGameOver() {
+    if (!mounted) {
+      // console.debug("Skipping animation before onMount.");
+      return;
+    }
+    // console.debug("animating GameOver!");
+    await delay(1000);
+    showConfetti = true;
+    await delay(1500);
+    showGameOverPopup = true;
+    await delay(500);
+    showConfetti = false;
+  }
+  $: {
+    // console.debug("reactive scope tripped ..");
+    if ($isGameOver) {
+      animateGameOver();
     }
   }
+  onMount(() => {
+    if ($isGameOver) {
+      showGameOverPopup = true;
+    }
+    mounted = true;
+  });
 </script>
 
 <Screen let:back {...$$restProps}>
@@ -67,49 +107,75 @@
       {$gameState.targets[0]}
     </Tile>
   </targetArea> -->
+  {#if showConfetti}
+    <ConfettiExplosion duration={4000} />
+  {/if}
   <PuzzleBox />
-  <board>
-    <TileBoard
-      on:pointerdown={() => {
-        if ($selectionMade === false) {
-          isDragging = true;
-        }
-      }}
-      on:pointermove={handlePointerMove}
-      on:pointerup={handlePointerUp}
-      on:pointerleave={handlePointerUp}
-      {rowCount}
-      {colCount}
-    >
-      {#each board as row, i}
-        {#each row as tile, j}
-          <div data-row={i} data-col={j}>
-            <Tile
-              hilite={tile.selectionIndex == -1
-                ? tile.hilite
-                : $isSelectionCorrect.complete === false
-                ? "selected"
-                : $isSelectionCorrect.correct
-                ? "target"
-                : "incorrect"}
-            >
-              {tile.label}
-            </Tile>
-          </div>
-        {/each}
+  <spacer />
+  <TileBoard
+    on:pointerdown={() => {
+      $isSelectionInProgress = true;
+    }}
+    on:pointermove={handlePointerMove}
+    on:pointerup={handlePointerUp}
+    on:pointerleave={handlePointerUp}
+    {rowCount}
+    {colCount}
+  >
+    {#each board as row, i}
+      {#each row as tile, j}
+        <div data-row={i} data-col={j}>
+          <Tile
+            hilite={tile.selectionIndex == -1
+              ? tile.hilite
+              : $isSelectionCorrect.complete === false
+              ? "selected"
+              : $isSelectionCorrect.correct
+              ? "target"
+              : "incorrect"}
+          >
+            {tile.label}
+          </Tile>
+        </div>
       {/each}
-    </TileBoard>
-  </board>
+    {/each}
+  </TileBoard>
   <spacer />
   <footer>
-    <WhiteButton on:click={back}>Exit</WhiteButton>
+    <WhiteButton on:click={() => (isPaused = true)}>
+      <PauseIcon style="margin-bottom:-0.2em;" /> Pause
+    </WhiteButton>
+    {#if HACKS_ENABLED}
+      <WhiteButton
+        on:click={() => {
+          $gameState = {
+            ...$gameState,
+            solved: $gameState.targets,
+          };
+        }}><HackIcon style="margin-bottom:-0.2em;" />EndGame</WhiteButton
+      >
+    {/if}
   </footer>
+  {#if isPaused}
+    <Popup>
+      <h1>Pause Menu</h1>
+      <WhiteButton on:click={() => (isPaused = false)}>
+        <EnterArrowIcon style="margin-bottom:-0.2em;" /> Resume
+      </WhiteButton>
+      <WhiteButton on:click={back}>
+        <ExitSessionIcon style="margin-bottom:-0.2em;" /> Abandon
+      </WhiteButton>
+    </Popup>
+  {/if}
+  {#if showGameOverPopup}
+    <Popup>
+      <h1>Puzzle Complete</h1>
+      <WhiteButton on:click={back}><ExitSessionIcon /> Done</WhiteButton>
+    </Popup>
+  {/if}
 </Screen>
 
 <style>
-  board {
-    margin-top: 1em;
-  }
   spacer {
     flex-grow: 1;
   }

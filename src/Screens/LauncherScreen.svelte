@@ -4,6 +4,7 @@
   import { fly, fade } from "svelte/transition";
   import Screen from "../Components/Screen.svelte";
   import logo from "../assets/Images/arithmagic.png";
+  import { EnterArrowIcon, SettingsIcon } from "../lib/icons";
 </script>
 
 <Screen let:navigateTo {...$$restProps}>
@@ -18,10 +19,10 @@
   <div class="menu">
     <h1>Main Menu</h1>
     <WhiteButton on:click={() => navigateTo("SelectionScreen")}>
-      Play
+      <EnterArrowIcon style="margin-bottom: -0.2em;" />
     </WhiteButton>
     <WhiteButton on:click={() => navigateTo("SettingsScreen")}>
-      Settings
+      <SettingsIcon style="margin-bottom: -0.2em;" />
     </WhiteButton>
   </div>
   <spacer />
