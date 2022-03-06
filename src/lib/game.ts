@@ -98,6 +98,12 @@ export function getNextSelectionIndex(
   return -1;
 }
 
+const OperatorConstraints: { [k in Operators]: { avoid: number[], easy: number[] } } = {
+  '+': { avoid: [], easy: [0] },
+  '-': { avoid: [], easy: [0] },
+  '*': { avoid: [0], easy: [1] },
+}
+
 export function getBoardSpec(level: number) {
   let boardSize = 7;
   let minTile = 0;
@@ -109,8 +115,16 @@ export function getBoardSpec(level: number) {
   else if (level <= 9) boardSize = 5;
   else if (level <= 12) boardSize = 6;
 
-  minTile = Math.max(level - 3, 0);
-  maxTile = Math.max(9 + level - 3, 9);
+  // TODO: extend to negative numbers !
+  minTile = Math.max(level - 1, 0);
+  maxTile = Math.max(9 + level * 2, 9);
+
+  if (level >= 10) {
+    minTile = -minTile
+    maxTile = Math.round(maxTile / 2)
+  }
+
+  howManyTargets += boardSize - 3
 
   return { boardSize, minTile, maxTile, howManyTargets };
 }
@@ -172,14 +186,14 @@ function findAllSolutions(
         }
 
         let acc = matrix[row][col];
-        let dbg = dirs[d] + ": " + acc;
+        // let dbg = dirs[d] + ": " + acc;
         for (let k = 0; k < opFns.length; k++) {
           const ck = sum({ row, col }, scale(delta, k + 1));
           acc = opFns[k](acc, matrix[ck.row][ck.col]);
-          dbg += ops[k] + matrix[ck.row][ck.col];
+          // dbg += ops[k] + matrix[ck.row][ck.col];
         }
-        dbg += "=" + acc;
-        console.debug(dbg);
+        // dbg += "=" + acc;
+        // console.debug(dbg);
         solutions[acc] = (solutions[acc] || 0) + 1;
       }
     }
@@ -198,12 +212,29 @@ export function makeBoard(
   let numBoard: number[][]
   let targets: number[];
 
+  const illegalNumbers = ops.flatMap((op) => {
+    if (level <= 5) {
+      return OperatorConstraints[op].avoid
+    } else {
+      return [
+        ...OperatorConstraints[op].avoid,
+        ...OperatorConstraints[op].easy,
+      ]
+    }
+  })
+
+  let legalNumbers = _.range(minTile, maxTile).filter((n) =>
+    illegalNumbers.indexOf(n) === -1
+  )
+
+  console.debug({ illegalNumbers, legalNumbers })
   let iterations = 0;
   do {
     let pool = [];
+
     while (pool.length < nTiles) {
       console.debug({ poolSize: pool.length, nTiles, minTile, maxTile });
-      pool = pool.concat(_.range(minTile, maxTile));
+      pool = pool.concat(legalNumbers)
     }
     pool = _.shuffle(pool);
 

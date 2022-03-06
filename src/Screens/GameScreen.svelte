@@ -23,12 +23,11 @@
     HackIcon,
     PauseIcon,
   } from "../lib/icons";
+  import { IS_DEV } from "../lib/dev";
 
   $: ({ board } = $gameState);
   $: rowCount = board.length;
   $: colCount = rowCount == 0 ? 0 : board[0].length;
-
-  const HACKS_ENABLED = false; // HACK: Move to .env file !
 
   function handlePointerMove(event: PointerEvent) {
     if (!$isSelectionInProgress || $isSelectionCorrect.complete) {
@@ -145,7 +144,7 @@
     <WhiteButton on:click={() => (isPaused = true)}>
       <PauseIcon style="margin-bottom:-0.2em;" /> Pause
     </WhiteButton>
-    {#if HACKS_ENABLED}
+    {#if IS_DEV}
       <WhiteButton
         on:click={() => {
           $gameState = {
