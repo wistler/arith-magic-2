@@ -93,7 +93,7 @@
   />
 
   <Tile hilite="target">
-    {#if $target}
+    {#if $target !== undefined}
       {$target}
     {:else}
       <CheckMarkIcon />
