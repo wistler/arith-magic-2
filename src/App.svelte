@@ -1,7 +1,7 @@
 <script lang="ts">
   import Header from "./Components/Header.svelte";
   import ScreenNavigator from "./Components/ScreenStackNavigator.svelte";
-  import bg from "./assets/Images/bg_2x.jpg";
+  import bg from "./assets/Images/bg.png";
 
   import { SCREENS } from "./Screens";
   import { navStack } from "./store/navigation";
@@ -23,7 +23,7 @@
 </script>
 
 <main style="background-image: url({bg});">
-  {#if $navStack.at(-1) !== "LauncherScreen"}
+  {#if $navStack.slice(-1)[0] !== "LauncherScreen"}
     <Header />
   {/if}
   <ScreenNavigator
