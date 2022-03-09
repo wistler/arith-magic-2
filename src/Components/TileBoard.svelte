@@ -3,19 +3,14 @@
   export let colCount: number;
 
   // HACK: Yuck ! Sizing !! Almost like media queries !!!
-  export let width =
-    colCount <= 2 ? 40 : colCount <= 4 ? 60 : colCount <= 6 ? 80 : 92;
+  export let width = 100;
   let minWidth =
     colCount <= 2 ? 5 : colCount <= 4 ? 8 : colCount <= 6 ? 11 : 12;
   let maxWidth =
-    colCount <= 2 ? 8 : colCount <= 4 ? 12 : colCount <= 6 ? 20 : 25;
+    colCount <= 2 ? 8 : colCount <= 4 ? 16 : colCount <= 6 ? 20 : 25;
 </script>
 
 <board
-  on:pointerleave
-  on:pointerdown
-  on:pointerup
-  on:pointermove
   style="--rows: {rowCount}; --cols: {colCount}; --width: {width}%; --min-width: {minWidth}em;--max-width: {maxWidth}em;"
 >
   <slot />
@@ -33,7 +28,7 @@
   board {
     display: grid;
     grid-template-columns: repeat(var(--cols), 1fr);
-    gap: 0.2em;
+    gap: 0.3em;
   }
   board > :global(div) {
     aspect-ratio: 1;

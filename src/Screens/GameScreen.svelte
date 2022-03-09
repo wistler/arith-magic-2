@@ -12,7 +12,6 @@
   import Tile from "../Components/Tile.svelte";
   import Screen from "../Components/Screen.svelte";
   import WhiteButton from "../Components/WhiteButton.svelte";
-  import { getActiveSelection } from "../lib/game";
   import Popup from "../Components/Popup.svelte";
   import { ConfettiExplosion } from "svelte-confetti-explosion";
   import { delay } from "../util/delay";
@@ -24,46 +23,11 @@
     PauseIcon,
   } from "../lib/icons";
   import { IS_DEV } from "../lib/dev";
+  import selectionStrategy from "./SelectionStrategy";
 
   $: ({ board } = $gameState);
   $: rowCount = board.length;
   $: colCount = rowCount == 0 ? 0 : board[0].length;
-
-  function handlePointerMove(event: PointerEvent) {
-    if (!$isSelectionInProgress || $isSelectionCorrect.complete) {
-      return;
-    }
-
-    const target = document.elementFromPoint(event.clientX, event.clientY);
-    // TODO only process target if we swype through the center
-
-    // console.debug({ pointermove: event, target });
-    const dataset = (target as HTMLElement).parentElement.dataset;
-    const { row, col } = dataset;
-    if (row !== undefined && col !== undefined) {
-      if (board[row][col].selectionIndex == -1) {
-        addToSelection({ row: +row, col: +col });
-      } else {
-        let irow = +row;
-        let icol = +col;
-
-        const chain = getActiveSelection(board);
-        if (chain.length < 2) return;
-
-        const lastButOne = chain.at(-2);
-        const last = chain.at(-1);
-
-        // console.debug({ row, col, lastButOne, last });
-        if (lastButOne.row === irow && lastButOne.col === icol) {
-          removeFromSelection({ ...last });
-        }
-      }
-    }
-  }
-
-  function handlePointerUp() {
-    $isSelectionInProgress = false;
-  }
 
   // local component ui states
   let showConfetti = false;
@@ -86,7 +50,6 @@
     showConfetti = false;
   }
   $: {
-    // console.debug("reactive scope tripped ..");
     if ($isGameOver) {
       animateGameOver();
     }
@@ -111,34 +74,38 @@
   {/if}
   <PuzzleBox />
   <spacer />
-  <TileBoard
-    on:pointerdown={() => {
-      $isSelectionInProgress = true;
+  <tileBoardContainer
+    use:selectionStrategy
+    on:selectionInProgress={({ detail: { inProgress } }) => {
+      $isSelectionInProgress = inProgress;
     }}
-    on:pointermove={handlePointerMove}
-    on:pointerup={handlePointerUp}
-    on:pointerleave={handlePointerUp}
-    {rowCount}
-    {colCount}
+    on:selectTile={({ detail: { add } }) => {
+      addToSelection(add);
+    }}
+    on:deselectTile={({ detail: { remove } }) => {
+      removeFromSelection(remove);
+    }}
   >
-    {#each board as row, i}
-      {#each row as tile, j}
-        <div data-row={i} data-col={j}>
-          <Tile
-            hilite={tile.selectionIndex == -1
-              ? tile.hilite
-              : $isSelectionCorrect.complete === false
-              ? "selected"
-              : $isSelectionCorrect.correct
-              ? "target"
-              : "incorrect"}
-          >
-            {tile.label}
-          </Tile>
-        </div>
+    <TileBoard {rowCount} {colCount}>
+      {#each board as row, i}
+        {#each row as tile, j}
+          <div data-row={i} data-col={j}>
+            <Tile
+              hilite={tile.selectionIndex == -1
+                ? tile.hilite
+                : $isSelectionCorrect.complete === false
+                ? "selected"
+                : $isSelectionCorrect.correct
+                ? "target"
+                : "incorrect"}
+            >
+              {tile.label}
+            </Tile>
+          </div>
+        {/each}
       {/each}
-    {/each}
-  </TileBoard>
+    </TileBoard>
+  </tileBoardContainer>
   <spacer />
   <footer>
     <WhiteButton on:click={() => (isPaused = true)}>
@@ -177,6 +144,16 @@
 <style>
   spacer {
     flex-grow: 1;
+  }
+  tileBoardContainer {
+    height: 100vmin;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    border-radius: 0.4em;
+    margin: 0.2em;
   }
   footer {
     width: 100%;
