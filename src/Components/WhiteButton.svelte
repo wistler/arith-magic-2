@@ -25,6 +25,7 @@
     transition: all 50ms ease-out;
     white-space: nowrap;
     font-size: 1em;
+    font-family: unset;
   }
 
   button:active {

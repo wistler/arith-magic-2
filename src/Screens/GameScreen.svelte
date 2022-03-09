@@ -92,6 +92,7 @@
         {#each row as tile, j}
           <div data-row={i} data-col={j}>
             <Tile
+              negative={+tile.label < 0}
               hilite={tile.selectionIndex == -1
                 ? tile.hilite
                 : $isSelectionCorrect.complete === false
@@ -164,7 +165,6 @@
   instruction {
     /* font-size: large; */
     color: black;
-    font-family: Georgia, "Times New Roman", Times, serif;
   }
   footer {
     width: 100%;

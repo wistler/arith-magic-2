@@ -11,7 +11,7 @@
 
 <style>
   button {
-    font-family: inherit;
+    /* font-family: inherit; */
     font-size: inherit;
     padding: 1em 2em;
     color: #ff3e00;

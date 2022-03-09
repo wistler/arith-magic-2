@@ -1,11 +1,18 @@
 <script lang="ts">
   import type { TileHiliteType } from "../store/game";
 
+  export let negative: boolean = false;
+  export let inactive: boolean = false;
   export let hilite: TileHiliteType = "normal";
   export let flat: boolean = false;
 </script>
 
-<div class={hilite} style="{flat ? 'box-shadow: none' : ''};">
+<div
+  class:negative
+  class:inactive
+  class={hilite}
+  style="{flat ? 'box-shadow: none' : ''};"
+>
   <slot />
 </div>
 
@@ -26,17 +33,25 @@
     /* font-size: 0.8em; */
     /* font-size: 80%; */
 
-    background-color: white;
+    color: midnightblue;
+
+    background-color: rgb(215, 223, 228);
     background-size: contain;
     border: none;
     border-radius: 0.3em;
     box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
 
-    transition: all 50ms ease-out;
+    transition: all 250ms ease-out;
   }
 
-  div:not(.disabled):not(.selected):hover {
-    transform: translate3d(-0em, -0.05em, 0);
+  div.negative {
+    color: red;
+    background-color: rgb(238, 223, 223);
+  }
+
+  div:not(.disabled):not(.selected):not(.inactive):not(.target):not(.incorrect):hover {
+    background-color: white;
+    transform: translate3d(-0.1em, -0.1em, 0);
     box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.5);
     transition: all 50ms ease-out;
   }
@@ -46,6 +61,7 @@
   }
 
   div.incorrect {
+    color: black;
     background-color: tomato;
   }
 

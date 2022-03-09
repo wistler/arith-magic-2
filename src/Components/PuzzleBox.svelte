@@ -58,7 +58,7 @@
 
 <puzzleBox>
   <div>
-    <Tile hilite={hilite_1} flat={hilite_1 === "normal"}>
+    <Tile inactive hilite={hilite_1} flat={hilite_1 === "normal"}>
       {$activeSelection.length >= 1 ? $activeSelection[0] : "?"}
     </Tile>
   </div>
@@ -71,7 +71,7 @@
     alt={operators[0]}
   />
 
-  <Tile hilite={hilite_2} flat={hilite_2 === "normal"}>
+  <Tile inactive hilite={hilite_2} flat={hilite_2 === "normal"}>
     {$activeSelection.length >= 2 ? $activeSelection[1] : "?"}
   </Tile>
 
@@ -83,7 +83,7 @@
     alt={operators[1]}
   />
 
-  <Tile hilite={hilite_3} flat={hilite_3 === "normal"}>
+  <Tile inactive hilite={hilite_3} flat={hilite_3 === "normal"}>
     {$activeSelection.length >= 3 ? $activeSelection[2] : "?"}
   </Tile>
 
@@ -92,7 +92,7 @@
     alt="="
   />
 
-  <Tile hilite="target">
+  <Tile inactive hilite="target">
     {#if $target !== undefined}
       {$target}
     {:else}
