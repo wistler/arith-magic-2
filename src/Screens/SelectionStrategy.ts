@@ -39,7 +39,7 @@ function swipeSelectionStrategy(node: HTMLElement): SvelteActionReturnType {
         const target = document.elementFromPoint(event.clientX, event.clientY);
         // TODO only process target if we swype through the center
 
-        console.debug({ pointermove: target })
+        // console.debug({ pointermove: target })
         if (!node.contains(target)) {
             // do we not care about this ??
             return;
@@ -58,11 +58,11 @@ function swipeSelectionStrategy(node: HTMLElement): SvelteActionReturnType {
     }
 
     const pointerDown = (event: PointerEvent) => {
-        console.debug("pointerDown");
+        // console.debug("pointerDown");
         setInProgress(true)
     }
     const pointerUp = (event: PointerEvent) => {
-        console.debug("pointerUp");
+        // console.debug("pointerUp");
         setInProgress(false)
     }
 
@@ -111,7 +111,7 @@ function tapSelectionStrategy(node: HTMLElement): SvelteActionReturnType {
 
     const handleClick = (event: PointerEvent) => {
         const { target } = event
-        console.debug({ click: target })
+        // console.debug({ click: target })
 
         const dataset = (target as HTMLElement).parentElement.dataset;
         const { row, col } = dataset;
