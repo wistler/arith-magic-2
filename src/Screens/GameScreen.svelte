@@ -118,7 +118,10 @@
             ...$gameState,
             solved: $gameState.targets,
           };
-        }}><HackIcon style="margin-bottom:-0.2em;" />EndGame</WhiteButton
+        }}
+        ><HackIcon
+          style="margin-bottom:-0.2em; color: red;"
+        />EndGame</WhiteButton
       >
     {/if}
   </footer>

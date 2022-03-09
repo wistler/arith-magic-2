@@ -171,30 +171,27 @@ function findAllSolutions(
 ): {
   [k: number]: number | undefined;
 } {
-  let opFns = ops.map((ch) => OperatorRules[ch]);
   let solutions: {
     [k: number]: number;
   } = {};
   for (let row = 0; row < matrix.length; row++) {
     for (let col = 0; col < matrix[row].length; col++) {
-      // console.debug(`iterating: [${row}, ${col}] ..`);
+      console.debug(`iterating: [${row}, ${col}] ..`);
       for (let d = 0; d < dirs.length; d++) {
         const delta = SupportedDirectionDeltas[dirs[d]];
-        const c2 = sum({ row, col }, scale(delta, opFns.length));
+        const c2 = sum({ row, col }, scale(delta, ops.length));
         if (!isCoordInRange(matrix, c2)) {
           continue;
         }
 
-        let acc = matrix[row][col];
-        // let dbg = dirs[d] + ": " + acc;
-        for (let k = 0; k < opFns.length; k++) {
+        let sel = [matrix[row][col]];
+        for (let k = 0; k < ops.length; k++) {
           const ck = sum({ row, col }, scale(delta, k + 1));
-          acc = opFns[k](acc, matrix[ck.row][ck.col]);
-          // dbg += ops[k] + matrix[ck.row][ck.col];
+          sel.push(matrix[ck.row][ck.col]);
         }
-        // dbg += "=" + acc;
-        // console.debug(dbg);
-        solutions[acc] = (solutions[acc] || 0) + 1;
+        console.debug(dirs[d]);
+        let sol = solve(sel, ops)
+        solutions[sol] = (solutions[sol] || 0) + 1;
       }
     }
   }
@@ -256,14 +253,18 @@ export function makeBoard(
 
     iterations++
 
+    console.warn(`Iteration: ${iterations}`)
+    console.table(numBoard);
+    console.table(solutions);
+
     if (targets.length === howManyTargets) {
       console.debug(`Prepared puzzle in ${iterations} iteration(s).`)
       break;
     }
 
-    console.warn(`Iteration: ${iterations}`)
-    console.table(numBoard);
-    console.table(solutions);
+    // console.warn(`Iteration: ${iterations}`)
+    // console.table(numBoard);
+    // console.table(solutions);
 
     if (iterations > 10) {
       console.error(`Could not prepare puzzle within iteration limit.`)

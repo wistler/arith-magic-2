@@ -14,7 +14,9 @@
   import WhiteButton from "./WhiteButton.svelte";
   import TileBoard from "./TileBoard.svelte";
   import Tile from "./Tile.svelte";
-  import { EnterArrowIcon, GridIcon } from "../lib/icons";
+  import { EnterArrowIcon, GridIcon, HackIcon } from "../lib/icons";
+  import { IS_DEV } from "../lib/dev";
+  import { unlockLevel } from "../store/profile";
 
   export let operators: Operators[];
   export let levelUnlocked: number;
@@ -50,6 +52,19 @@
       </WhiteButton>
     </div>
     <div>
+      {#if IS_DEV}
+        <WhiteButton
+          tight
+          flat
+          on:click={() => {
+            unlockLevel(operators, levelUnlocked + 1);
+          }}
+          ><HackIcon
+            style="margin-bottom:-0.2em; font-size: medium; color: red;"
+          /></WhiteButton
+        >
+      {/if}
+
       <WhiteButton
         flat
         disabled={levelUnlocked == 0}

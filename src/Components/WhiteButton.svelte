@@ -1,10 +1,15 @@
 <script lang="ts">
   export let disabled: boolean = undefined;
   export let flat: boolean = false;
+  export let tight: boolean = false;
 </script>
 
-<button {disabled} on:click style="{flat ? 'box-shadow: none' : ''};"
-  ><slot /></button
+<button
+  {disabled}
+  on:click
+  style="{flat ? 'box-shadow: none' : ''}; {tight
+    ? 'margin: 0; padding: 0.1em;'
+    : ''}"><slot /></button
 >
 
 <style>
