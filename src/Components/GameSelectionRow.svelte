@@ -26,7 +26,7 @@
   const dispatcher = createEventDispatcher();
 </script>
 
-<drawer bind:this={me}>
+<drawer bind:this={me} class:expanded={$drawerOpen === me}>
   <row>
     <operators>
       {#each operators as op}
@@ -77,20 +77,16 @@
       </WhiteButton>
     </div>
   </row>
-  {#if $drawerOpen === me}
-    <TileBoard
-      rowCount={levelUnlocked / 5}
-      colCount={Math.min(levelUnlocked, 5)}
-    >
-      {#each _.range(1, levelUnlocked + 1) as level}
-        <div on:click={() => dispatcher("startGame", { level })}>
-          <Tile>
-            {level}
-          </Tile>
-        </div>
-      {/each}
-    </TileBoard>
-  {/if}
+
+  <TileBoard rowCount={levelUnlocked / 5} colCount={Math.min(levelUnlocked, 5)}>
+    {#each _.range(1, levelUnlocked + 1) as level, i}
+      <div on:click={() => dispatcher("startGame", { level })}>
+        <Tile outlined>
+          {level}
+        </Tile>
+      </div>
+    {/each}
+  </TileBoard>
 </drawer>
 
 <style>
@@ -114,6 +110,15 @@
     /* width: 100%; */
     /* margin-right: -0.3em; */
     padding: 0;
+    max-height: 2.5em;
+    transition: max-height 0.25s ease-out;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  drawer.expanded {
+    max-height: 25em;
+    transition: max-height 0.25s ease-out;
+    /* overflow: hidden; */
   }
   operators {
     display: grid;

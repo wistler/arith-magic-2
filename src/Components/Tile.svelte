@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { TileHiliteType } from "../store/game";
 
+  export let outlined: boolean = false;
   export let negative: boolean = false;
   export let inactive: boolean = false;
   export let hilite: TileHiliteType = "normal";
@@ -8,6 +9,7 @@
 </script>
 
 <div
+  class:outlined
   class:negative
   class:inactive
   class={hilite}
@@ -41,7 +43,12 @@
     border-radius: 0.3em;
     box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
 
-    transition: all 250ms ease-out;
+    transition: all 200ms ease-out;
+  }
+
+  div.outlined {
+    border: 2px solid rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
   }
 
   div.negative {

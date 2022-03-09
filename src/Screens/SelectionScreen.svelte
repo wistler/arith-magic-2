@@ -35,9 +35,9 @@
       {/each}
     </list>
   </list-box>
-  <div>
+  <footer>
     <WhiteButton on:click={back}><ExitSessionIcon /></WhiteButton>
-  </div>
+  </footer>
 </Screen>
 
 <style>
@@ -63,5 +63,17 @@
     margin-right: -25px;
     margin-left: 7px;
     padding-right: 25px; */
+  }
+  footer {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25em;
+  }
+  footer > :global(*) {
+    min-width: 5em;
   }
 </style>
