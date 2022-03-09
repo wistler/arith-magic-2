@@ -152,4 +152,10 @@ const browser = detectBrowser()
 
 // FIXME: Need to get swipe working in Chrome/Edge. Only firefox support.
 export default (browser === 'firefox') ?
-    swipeSelectionStrategy : tapSelectionStrategy
+    {
+        instruction: "Swipe 3 tiles in a line",
+        strategy: swipeSelectionStrategy
+    } : {
+        instruction: "Tap numbers to select them",
+        strategy: tapSelectionStrategy
+    }

@@ -75,7 +75,7 @@
   <PuzzleBox />
   <spacer />
   <tileBoardContainer
-    use:selectionStrategy
+    use:selectionStrategy.strategy
     on:selectionInProgress={({ detail: { inProgress } }) => {
       $isSelectionInProgress = inProgress;
     }}
@@ -86,6 +86,7 @@
       removeFromSelection(remove);
     }}
   >
+    <instruction>{selectionStrategy.instruction}</instruction>
     <TileBoard {rowCount} {colCount}>
       {#each board as row, i}
         {#each row as tile, j}
@@ -157,6 +158,13 @@
     /* background-color: rgba(0, 0, 0, 0.5); */
     border-radius: 0.4em;
     margin: 0.2em;
+    display: flex;
+    flex-direction: column;
+  }
+  instruction {
+    /* font-size: large; */
+    color: black;
+    font-family: Georgia, "Times New Roman", Times, serif;
   }
   footer {
     width: 100%;
