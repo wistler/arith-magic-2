@@ -1,12 +1,17 @@
 import _ from "lodash";
 import type { Operators } from "../lib/game";
-import { DEFAULT_LEVELS, unlockLevels } from "../lib/progression";
+import { DEFAULT_LEVELS, MAX_LEVEL, unlockLevels } from "../lib/progression";
 import { get } from "svelte/store";
 import { persisted } from "../util/persited";
 import { gameState, isGameOver } from "./game";
 
 
-export const levels = persisted("levels", DEFAULT_LEVELS);
+export const levels = persisted("levels", DEFAULT_LEVELS, (saved, def) => {
+  return {
+    ...def,
+    ..._.mapValues(saved, (s) => Math.min(MAX_LEVEL, s))
+  }
+});
 
 export function getListing() {
   return _.entries(get(levels)).map(([ops, lvl]) => {

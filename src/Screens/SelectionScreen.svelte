@@ -10,11 +10,16 @@
   import WhiteButton from "../Components/WhiteButton.svelte";
   import { newGame } from "../store/game";
   import { getListing, levels } from "../store/profile";
+  import { onDestroy } from "svelte";
 
   let listing = getListing();
-  levels.subscribe(() => {
+  const unsubscribe = levels.subscribe(() => {
     console.debug("Levels store changed, updating listing..");
     listing = getListing();
+  });
+
+  onDestroy(() => {
+    unsubscribe();
   });
 </script>
 
@@ -23,7 +28,9 @@
 <Screen let:navigateTo let:back {...$$restProps}>
   <list-box>
     <list>
-      {#each listing as { operators, levelUnlocked }}
+      {#each listing
+        .slice()
+        .sort( (a, b) => (a.levelUnlocked > 0 && b.levelUnlocked ? a.levelUnlocked - b.levelUnlocked : b.levelUnlocked - a.levelUnlocked) ) as { operators, levelUnlocked }}
         <GameSelectionRow
           {operators}
           {levelUnlocked}

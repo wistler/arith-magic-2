@@ -14,7 +14,12 @@
   import WhiteButton from "./WhiteButton.svelte";
   import TileBoard from "./TileBoard.svelte";
   import Tile from "./Tile.svelte";
-  import { EnterArrowIcon, GridIcon, HackIcon } from "../lib/icons";
+  import {
+    EnterArrowIcon,
+    GridAltIcon,
+    GridIcon,
+    HackIcon,
+  } from "../lib/icons";
   import { IS_DEV } from "../lib/dev";
   import { unlockLevel } from "../store/profile";
 
@@ -48,7 +53,11 @@
           }
         }}
       >
-        <GridIcon style="margin-bottom: -0.2em;" />
+        {#if $drawerOpen === me}
+          <GridAltIcon style="margin-bottom: -0.2em;" />
+        {:else}
+          <GridIcon style="margin-bottom: -0.2em;" />
+        {/if}
       </WhiteButton>
     </div>
     <div>

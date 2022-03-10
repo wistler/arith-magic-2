@@ -4,9 +4,8 @@
 
   // HACK: Yuck ! Sizing !! Almost like media queries !!!
   export let width = 95;
-  let minWidth =
-    colCount <= 2 ? 5 : colCount <= 4 ? 8 : colCount <= 6 ? 11 : 12;
-  let maxWidth =
+  $: minWidth = colCount <= 2 ? 5 : colCount <= 4 ? 8 : colCount <= 6 ? 11 : 12;
+  $: maxWidth =
     colCount <= 2 ? 8 : colCount <= 4 ? 16 : colCount <= 6 ? 20 : 25;
 </script>
 

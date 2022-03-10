@@ -25,6 +25,7 @@ export const DEFAULT_LEVELS = {
 };
 
 export type LevelsType = typeof DEFAULT_LEVELS
+export const MAX_LEVEL = 25;
 
 export function unlockLevels(levelsUnlocked: LevelsType, ops: Operators[], level: number): Partial<LevelsType> {
     const key = ops.join("")
@@ -39,17 +40,17 @@ export function unlockLevels(levelsUnlocked: LevelsType, ops: Operators[], level
         nextGameInDifficulty = GamesInOrderOfDifficulty[keyIndex + 1]
     }
 
-    if (level <= 5 || (nextGameInDifficulty !== undefined && levelsUnlocked[nextGameInDifficulty] > 0)) {
+    if (level <= 5 || nextGameInDifficulty === undefined || levelsUnlocked[nextGameInDifficulty] > 0) {
         // no new game type to unlock, just upgrade level
         return {
             ...levelsUnlocked,
-            [key]: level,
+            [key]: Math.min(level, MAX_LEVEL),
         }
     }
 
     // more than 5 levels in current game type unlocks next game type if one is availabel ..
     return {
-        [key]: level,
+        [key]: Math.min(level, MAX_LEVEL),
         [nextGameInDifficulty]: 1,
     }
 }

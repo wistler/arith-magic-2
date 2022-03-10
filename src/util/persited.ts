@@ -8,9 +8,9 @@ function mergeState(hydrated: any, def: any): any {
   return { ...def, ...hydrated };
 }
 
-export function persisted<T>(key: string, def: T): Writable<T> {
+export function persisted<T>(key: string, def: T, mergeFn: (saved: T, def: T) => T = undefined): Writable<T> {
   const prev = localStorage.getItem(key);
-  const store = writable(mergeState(JSON.parse(prev), def));
+  const store = writable((mergeFn || mergeState)(JSON.parse(prev), def));
   store.subscribe((val) => {
     localStorage.setItem(key, JSON.stringify(val));
   });
