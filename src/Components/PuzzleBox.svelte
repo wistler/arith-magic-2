@@ -57,11 +57,9 @@
 </script>
 
 <puzzleBox>
-  <div>
-    <Tile inactive hilite={hilite_1} flat={hilite_1 === "normal"}>
-      {$activeSelection.length >= 1 ? $activeSelection[0] : "?"}
-    </Tile>
-  </div>
+  <Tile inactive hilite={hilite_1} flat={hilite_1 === "normal"}>
+    {$activeSelection.length >= 1 ? $activeSelection[0] : "?"}
+  </Tile>
 
   <img
     src={OperatorIcons[operators[0]][
@@ -108,23 +106,25 @@
     flex-wrap: nowrap;
     padding: 0.25em;
 
-    width: 80%;
+    /* width: 80%; */
     /* contain: content; */
     max-height: 3em;
 
-    min-width: 12em;
+    /* min-width: 12em;
     max-width: 25em;
-    width: 92vw;
+    width: 92vw; */
 
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 0.4em;
   }
 
   puzzleBox > :global(*) {
-    height: 2.5em;
-    width: 2.5em;
+    /* height: 2.5em; */
+    min-width: 2em;
+    max-width: 3em;
+    /* width: 10vh; */
     aspect-ratio: 1;
   }
 

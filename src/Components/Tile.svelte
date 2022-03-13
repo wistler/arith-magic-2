@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { scale } from "svelte/transition";
   import type { TileHiliteType } from "../store/game";
 
   export let outlined: boolean = false;
@@ -21,9 +22,7 @@
 <style>
   div {
     /* padding: 0.25em 0.5em 0.25em 0.5em; */
-    /* aspect-ratio: 1/1; */
-    width: 100%;
-    height: 100%;
+    aspect-ratio: 1;
     display: grid;
     grid-template-columns: auto;
     grid-template-rows: auto;

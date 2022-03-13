@@ -63,7 +63,7 @@
 </script>
 
 <Screen let:back {...$$restProps}>
-  <spacer />
+  <!-- <spacer /> -->
   <!-- <targetArea>
     <Tile hilite="target">
       {$gameState.targets[0]}
@@ -72,8 +72,11 @@
   {#if showConfetti}
     <ConfettiExplosion duration={4000} />
   {/if}
-  <PuzzleBox />
-  <spacer />
+  <puzzleBoxDiv>
+    <PuzzleBox />
+  </puzzleBoxDiv>
+  <!-- <spacer /> -->
+  <instruction>{selectionStrategy.instruction}</instruction>
   <tileBoardContainer
     use:selectionStrategy.strategy
     on:selectionInProgress={({ detail: { inProgress } }) => {
@@ -86,11 +89,10 @@
       removeFromSelection(remove);
     }}
   >
-    <instruction>{selectionStrategy.instruction}</instruction>
     <TileBoard {rowCount} {colCount}>
       {#each board as row, i}
         {#each row as tile, j}
-          <div data-row={i} data-col={j}>
+          <tileDiv data-row={i} data-col={j}>
             <Tile
               negative={+tile.label < 0}
               hilite={tile.selectionIndex == -1
@@ -103,12 +105,12 @@
             >
               {tile.label}
             </Tile>
-          </div>
+          </tileDiv>
         {/each}
       {/each}
     </TileBoard>
   </tileBoardContainer>
-  <spacer />
+  <!-- <spacer /> -->
   <footer>
     <WhiteButton on:click={() => (isPaused = true)}>
       <PauseIcon style="margin-bottom:-0.2em;" /> Pause
@@ -147,20 +149,20 @@
 </Screen>
 
 <style>
-  spacer {
-    flex-grow: 1;
-  }
   tileBoardContainer {
-    height: 100vmin;
+    flex: 1;
     aspect-ratio: 1;
+    max-width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-color: rgba(0, 0, 0, 0.5); */
     border-radius: 0.4em;
     margin: 0.2em;
     display: flex;
     flex-direction: column;
+
+    display: flex;
+    flex-direction: row;
   }
   instruction {
     /* font-size: large; */
