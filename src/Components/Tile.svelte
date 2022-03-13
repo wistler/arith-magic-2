@@ -33,9 +33,22 @@
     /* font-size: 0.8em; */
     /* font-size: 80%; */
 
-    color: midnightblue;
+    --color-positive-number: midnightblue;
+    --color-positive-number-bg: rgb(215, 223, 228);
+    --color-negative-number: red;
+    --color-negative-number-bg: rgb(238, 223, 223);
+    --color-hover-bg: white;
+    --color-target-bg: greenyellow;
+    --color-incorrect: black;
+    --color-incorrect-bg: tomato;
+    --color-hint-bg: khaki;
+    --color-selected-bg: cornflowerblue;
+    --color-disabled: grey;
+    --color-disabled-bg: lightgray;
 
-    background-color: rgb(215, 223, 228);
+    color: var(--color-positive-number);
+    background-color: var(--color-positive-number-bg);
+
     background-size: contain;
     border: none;
     border-radius: 0.3em;
@@ -50,33 +63,33 @@
   }
 
   div.negative {
-    color: red;
-    background-color: rgb(238, 223, 223);
+    color: var(--color-negative-number);
+    background-color: var(--color-negative-number-bg);
   }
 
   div:not(.disabled):not(.selected):not(.inactive):not(.target):not(.incorrect):hover {
-    background-color: white;
+    background-color: var(--color-hover-bg);
     transform: translate3d(-0.1em, -0.1em, 0);
     box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.5);
     transition: all 50ms ease-out;
   }
 
   div.target {
-    background-color: greenyellow;
+    background-color: var(--color-target-bg);
   }
 
   div.incorrect {
-    color: black;
-    background-color: tomato;
+    color: var(--color-incorrect);
+    background-color: var(--color-incorrect-bg);
   }
 
   div.hint {
-    background-color: khaki;
+    background-color: var(--color-hint-bg);
   }
 
   /* div:not(.disabled):active, */
   div.selected {
-    background-color: cornflowerblue;
+    background-color: var(--color-selected-bg);
     transform: translate3d(0, 0, 0);
     /* box-shadow: 2px 2px 2px rgb(42, 188, 255); */
     /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 1); */
@@ -84,11 +97,28 @@
 
   div.disabled {
     box-shadow: none;
-    background-color: lightgray;
-    color: gray;
+    color: var(--color-disabled);
+    background-color: var(--color-disabled-bg);
   }
 
   div.disabled :global(*) {
     opacity: 30%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    div {
+      --color-positive-number: rgb(166, 166, 228);
+      --color-positive-number-bg: rgb(48, 75, 92);
+      --color-negative-number: rgb(226, 159, 159);
+      --color-negative-number-bg: rgb(88, 54, 54);
+      --color-hover-bg: rgb(80, 80, 80);
+      --color-target-bg: rgb(100, 133, 47);
+      --color-incorrect: rgb(255, 255, 255);
+      --color-incorrect-bg: rgb(161, 71, 55);
+      --color-hint-bg: khaki;
+      --color-selected-bg: rgb(57, 85, 138);
+      --color-disabled: rgb(172, 172, 172);
+      --color-disabled-bg: rgb(99, 99, 99);
+    }
   }
 </style>

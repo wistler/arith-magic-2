@@ -133,4 +133,9 @@
     height: 1.7em;
     width: 1.7em;
   }
+  @media (prefers-color-scheme: dark) {
+    puzzleBox > img {
+      filter: brightness(60%) contrast(200%);
+    }
+  }
 </style>

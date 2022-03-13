@@ -31,7 +31,11 @@
   const dispatcher = createEventDispatcher();
 </script>
 
-<drawer bind:this={me} class:expanded={$drawerOpen === me}>
+<drawer
+  bind:this={me}
+  class:disabled={levelUnlocked <= 1}
+  class:expanded={$drawerOpen === me}
+>
   <row>
     <operators>
       {#each operators as op}
@@ -129,6 +133,9 @@
     transition: max-height 0.25s ease-out;
     /* overflow: hidden; */
   }
+  drawer.disabled {
+    opacity: 50%;
+  }
   operators {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -137,5 +144,14 @@
   }
   operators img {
     width: 2em;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    drawer {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    operators img {
+      filter: brightness(60%) contrast(200%);
+    }
   }
 </style>

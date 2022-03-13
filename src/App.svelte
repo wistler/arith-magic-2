@@ -7,6 +7,17 @@
   import { navStack } from "./store/navigation";
   import { onMount } from "svelte";
 
+  function checkDarkMode() {
+    const isDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    console.log({ isDarkMode });
+  }
+  checkDarkMode();
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", checkDarkMode);
+
   onMount(() => {
     document.documentElement.style.setProperty(
       "--window-height",
@@ -55,5 +66,20 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    main {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      background-blend-mode: darken;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    main {
+      background: white;
+      color: #333;
+    }
   }
 </style>
