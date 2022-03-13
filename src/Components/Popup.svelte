@@ -52,6 +52,7 @@
 
   popup {
     background-color: rgba(255, 255, 255, 0.8);
+    color: black;
     /* border: 1px solid black; */
     border-radius: 0.2em;
     display: flex;
@@ -66,5 +67,19 @@
     height: 70%;
     margin: 0;
     /* padding: 0 5% 10% 5%; */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    popup {
+      background-color: rgba(61, 61, 61, 0.795);
+      color: #ccc;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    popup {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: black;
+    }
   }
 </style>

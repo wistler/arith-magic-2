@@ -15,4 +15,17 @@
     background-color: rgba(255, 255, 255, 0.3);
     color: black;
   }
+
+  @media (prefers-color-scheme: dark) {
+    header {
+      background-color: rgba(0, 0, 0, 0.3);
+      color: #ccc;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    header {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
 </style>

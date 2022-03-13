@@ -46,7 +46,7 @@
     console.debug(`${screenKey} prepareToUnhide..`);
     console.debug(`${screenKey} resuming animations..`);
     screen?.querySelectorAll("[data-animation]").forEach((e: HTMLElement) => {
-      console.log(e);
+      // console.log(e);
       e.style.animationPlayState = "running";
     });
   }
@@ -55,7 +55,7 @@
     // pause any animations
     console.debug(`${screenKey} hidden..`);
     screen?.querySelectorAll("[data-animation]").forEach((e: HTMLElement) => {
-      console.log(e);
+      // console.log(e);
       e.style.animationPlayState = "paused";
     });
     console.debug(`${screenKey} paused animations..`);
@@ -146,5 +146,17 @@
   .content {
     overflow: hidden;
     box-sizing: border-box;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    blanket[onTop="false"] {
+      background-color: black;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    blanket[onTop="false"] {
+      background-color: white;
+    }
   }
 </style>
