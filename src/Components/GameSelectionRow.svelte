@@ -33,7 +33,7 @@
 
 <drawer
   bind:this={me}
-  class:disabled={levelUnlocked <= 1}
+  class:disabled={levelUnlocked < 1}
   class:expanded={$drawerOpen === me}
 >
   <row>
@@ -148,7 +148,7 @@
 
   @media (prefers-color-scheme: dark) {
     drawer {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(0, 0, 0, 0.2);
     }
     operators img {
       filter: brightness(60%) contrast(200%);
