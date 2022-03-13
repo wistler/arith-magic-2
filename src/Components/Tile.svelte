@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { scale } from "svelte/transition";
   import type { TileHiliteType } from "../store/game";
 
   export let outlined: boolean = false;
