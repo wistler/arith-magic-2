@@ -32,13 +32,24 @@ export type GameBoardStateType = {
   board: Array<Array<TileStateType>>;
   targets: number[];
   solved: number[];
+  errors: boolean[];
 };
+
+const DEFAULT_GAME_STATE: GameBoardStateType = {
+  level: 0,
+  operators: [],
+  board: [],
+  targets: [],
+  solved: [],
+  errors: [],
+}
 
 ////////////////// STATE /////////////////
 
 export const gameState = persisted<GameBoardStateType>(
   "gameState",
-  {} as GameBoardStateType
+  DEFAULT_GAME_STATE,
+  (saved, def) => ({ ...def, ...saved })
 );
 
 export const activeSelection = writable([] as number[]);
@@ -63,11 +74,11 @@ export const isGameOver = derived(gameState, ($gameState => {
 export function newGame(ops: Operators[], level: number) {
   const { board, targets } = makeBoard(ops, level);
   const newState: GameBoardStateType = {
+    ...DEFAULT_GAME_STATE,
     level,
     operators: ops,
     board,
     targets,
-    solved: [],
   };
 
   gameState.set(newState);
@@ -171,6 +182,8 @@ export function validateSelection():
       clearSelection();
       if (correct) {
         targetSolved();
+      } else {
+        markError();
       }
     },
   };
@@ -180,7 +193,25 @@ export function validateSelection():
 
 function targetSolved() {
   const $gameState = get(gameState);
-  gameState.set({ ...$gameState, solved: [...$gameState.solved, get(target)] })
+  const { solved, errors } = $gameState;
+  gameState.set({
+    ...$gameState, solved: [...solved, get(target)],
+    errors: errors.length > solved.length ? errors : [...errors, false]
+  })
+}
+
+function markError() {
+  const $gameState = get(gameState);
+  const { solved, errors } = $gameState;
+  gameState.set({
+    ...$gameState,
+    errors: errors.length > solved.length ? errors : [...errors, true]
+  })
+}
+
+export const DEV_HACKS = {
+  targetSolved,
+  markError
 }
 
 function clearSelection() {

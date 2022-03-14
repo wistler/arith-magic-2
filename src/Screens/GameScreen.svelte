@@ -6,6 +6,7 @@
     isSelectionCorrect,
     removeFromSelection,
     isSelectionInProgress,
+    DEV_HACKS,
   } from "../store/game";
   import PuzzleBox from "../Components/PuzzleBox.svelte";
   import TileBoard from "../Components/TileBoard.svelte";
@@ -17,17 +18,35 @@
   import { delay } from "../util/delay";
   import { onMount } from "svelte";
   import {
+    CheckMarkIcon,
     EnterArrowIcon,
     ExitSessionIcon,
     HackIcon,
     PauseIcon,
+    PerfectIcon,
+    WaypointIcon,
   } from "../lib/icons";
   import { IS_DEV } from "../lib/dev";
   import selectionStrategy from "./SelectionStrategy";
+  import ProgressWay from "../Components/ProgressWay.svelte";
 
-  $: ({ board } = $gameState);
+  $: ({ board, targets, solved, errors } = $gameState);
   $: rowCount = board.length;
   $: colCount = rowCount == 0 ? 0 : board[0].length;
+
+  $: steps = targets.map((t, i) =>
+    i < solved.length
+      ? {
+          icon: errors[i] === true ? CheckMarkIcon : PerfectIcon,
+        }
+      : {
+          icon: WaypointIcon,
+        }
+  );
+
+  $: {
+    console.log({ targets, solved, current: solved.length });
+  }
 
   // local component ui states
   let showConfetti = false;
@@ -63,19 +82,31 @@
 </script>
 
 <Screen let:back {...$$restProps}>
-  <!-- <spacer /> -->
   <!-- <targetArea>
     <Tile hilite="target">
       {$gameState.targets[0]}
     </Tile>
   </targetArea> -->
+  <stepsDiv>
+    <ProgressWay {steps} current={solved.length} />
+    {#if IS_DEV}
+      <WhiteButton
+        tight
+        flat
+        on:click={() => {
+          DEV_HACKS.targetSolved();
+        }}
+      >
+        <HackIcon style="margin-bottom:-0.2em; color: red;" />
+      </WhiteButton>
+    {/if}
+  </stepsDiv>
   {#if showConfetti}
     <ConfettiExplosion duration={4000} />
   {/if}
   <puzzleBoxDiv>
     <PuzzleBox />
   </puzzleBoxDiv>
-  <!-- <spacer /> -->
   <instruction>{selectionStrategy.instruction}</instruction>
   <tileBoardContainer
     use:selectionStrategy.strategy
@@ -110,7 +141,6 @@
       {/each}
     </TileBoard>
   </tileBoardContainer>
-  <!-- <spacer /> -->
   <footer>
     <WhiteButton on:click={() => (isPaused = true)}>
       <PauseIcon style="margin-bottom:-0.2em;" /> Pause
@@ -121,12 +151,12 @@
           $gameState = {
             ...$gameState,
             solved: $gameState.targets,
+            errors: $gameState.targets.map(() => false),
           };
         }}
-        ><HackIcon
-          style="margin-bottom:-0.2em; color: red;"
-        />EndGame</WhiteButton
       >
+        <HackIcon style="margin-bottom:-0.2em; color: red;" />
+      </WhiteButton>
     {/if}
   </footer>
   {#if isPaused}
@@ -149,6 +179,12 @@
 </Screen>
 
 <style>
+  stepsDiv {
+    padding-top: 0.2em;
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+  }
   tileBoardContainer {
     flex: 1;
     aspect-ratio: 1;
@@ -163,10 +199,6 @@
 
     display: flex;
     flex-direction: row;
-  }
-  instruction {
-    /* font-size: large; */
-    color: black;
   }
   footer {
     width: 100%;
