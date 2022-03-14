@@ -30,7 +30,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    /* padding: 0.5em; */
+    padding: 0.35em;
 
     max-height: 3em;
 
