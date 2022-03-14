@@ -6,3 +6,6 @@ export { default as SettingsIcon } from "~icons/ion/settings-outline";
 export { default as HackIcon } from "~icons/ion/hammer";
 export { default as PauseIcon } from "~icons/ion/ios-pause-outline";
 export { default as CheckMarkIcon } from "~icons/ion/checkmark"
+export { default as WaypointIcon } from "~icons/ion/location-outline"
+export { default as PerfectIcon } from "~icons/ion/star-outline"
+export { default as CurrentStepIcon } from "~icons/ion/eye"
