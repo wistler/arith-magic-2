@@ -7,7 +7,7 @@
   import { navStack } from "./store/navigation";
   import { onMount } from "svelte";
 
-  if (window.matchMedia("(prefers-color-scheme)").media !== "not all") {
+  if (window.matchMedia("(prefers-color-scheme: dark)").media !== "not all") {
     console.log("🎉 Dark mode is supported");
     function checkDarkMode() {
       const isDarkMode = window.matchMedia(
