@@ -1,3 +1,4 @@
+import { } from "./util/polyfills";
 import { registerSW } from 'virtual:pwa-register'
 import App from './App.svelte'
 
