@@ -7,16 +7,22 @@
   import { navStack } from "./store/navigation";
   import { onMount } from "svelte";
 
-  function checkDarkMode() {
-    const isDarkMode = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    console.log({ isDarkMode });
+  if (window.matchMedia("(prefers-color-scheme)").media !== "not all") {
+    console.log("🎉 Dark mode is supported");
+    function checkDarkMode() {
+      const isDarkMode = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      console.log({ isDarkMode });
+    }
+    checkDarkMode();
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mediaQuery?.addEventListener) {
+      mediaQuery.addEventListener("change", checkDarkMode);
+    } else {
+      mediaQuery.addListener(checkDarkMode);
+    }
   }
-  checkDarkMode();
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", checkDarkMode);
 
   onMount(() => {
     document.documentElement.style.setProperty(
