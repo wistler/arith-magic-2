@@ -2,12 +2,14 @@
   import { fly, fade } from "svelte/transition";
   import { createEventDispatcher } from "svelte";
   import { writable } from "svelte/store";
+  import { isDarkMode } from "../store/profile";
   const dispatch = createEventDispatcher();
 
   const overBlanket = writable(false);
 </script>
 
 <blanket
+  class:isDarkMode={$isDarkMode}
   in:fade
   out:fade={{ delay: 250, duration: 400 }}
   on:mouseenter={() => ($overBlanket = true)}
@@ -69,17 +71,17 @@
     /* padding: 0 5% 10% 5%; */
   }
 
-  @media (prefers-color-scheme: dark) {
-    popup {
-      background-color: rgba(61, 61, 61, 0.795);
-      color: #ccc;
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  blanket.isDarkMode popup {
+    background-color: rgba(61, 61, 61, 0.795);
+    color: #ccc;
   }
+  /* } */
 
-  @media (prefers-color-scheme: light) {
-    popup {
-      background-color: rgba(255, 255, 255, 0.8);
-      color: black;
-    }
+  /* @media (prefers-color-scheme: light) { */
+  popup {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
   }
+  /* } */
 </style>

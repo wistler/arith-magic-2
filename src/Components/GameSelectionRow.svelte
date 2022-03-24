@@ -21,7 +21,7 @@
     HackIcon,
   } from "../lib/icons";
   import { IS_DEV } from "../lib/dev";
-  import { unlockLevel } from "../store/profile";
+  import { isDarkMode, unlockLevel } from "../store/profile";
 
   export let operators: Operators[];
   export let levelUnlocked: number;
@@ -32,6 +32,7 @@
 </script>
 
 <drawer
+  class:isDarkMode={$isDarkMode}
   bind:this={me}
   class:disabled={levelUnlocked < 1}
   class:expanded={$drawerOpen === me}
@@ -146,12 +147,12 @@
     width: 2em;
   }
 
-  @media (prefers-color-scheme: dark) {
-    drawer {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-    operators img {
-      filter: brightness(60%) contrast(200%);
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  drawer.isDarkMode {
+    background-color: rgba(0, 0, 0, 0.2);
   }
+  drawer.isDarkMode operators img {
+    filter: brightness(60%) contrast(200%);
+  }
+  /* } */
 </style>

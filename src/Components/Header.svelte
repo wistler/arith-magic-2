@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { isDarkMode } from "../store/profile";
+
   $: count = 3;
   const increment = () => {
     count += 2;
   };
 </script>
 
-<header>ArithMagic</header>
+<header class:isDarkMode={$isDarkMode}>ArithMagic</header>
 
 <style>
   header {
@@ -16,16 +18,16 @@
     color: black;
   }
 
-  @media (prefers-color-scheme: dark) {
-    header {
-      background-color: rgba(0, 0, 0, 0.3);
-      color: #ccc;
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  header.isDarkMode {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #ccc;
   }
+  /* } */
 
-  @media (prefers-color-scheme: light) {
-    header {
-      background-color: rgba(255, 255, 255, 0.3);
-    }
+  /* @media (prefers-color-scheme: light) { */
+  header {
+    background-color: rgba(255, 255, 255, 0.3);
   }
+  /* } */
 </style>

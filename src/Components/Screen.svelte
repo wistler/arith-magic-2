@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { isDarkMode } from "../store/profile";
   import { getContext, onDestroy, onMount } from "svelte";
   import { fly, fade } from "svelte/transition";
   import type { ScreenProps } from "./@types/Screen";
@@ -78,6 +79,7 @@
   Blanket will be fully hidden by screen after transition complete.
  -->
 <blanket
+  class:isDarkMode={$isDarkMode}
   {onTop}
   style={blanketStyle}
   in:fly={{ y: 50 }}
@@ -148,15 +150,15 @@
     box-sizing: border-box;
   }
 
-  @media (prefers-color-scheme: dark) {
-    blanket[onTop="false"] {
-      background-color: black;
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  blanket.isDarkMode[onTop="false"] {
+    background-color: black;
   }
+  /* } */
 
-  @media (prefers-color-scheme: light) {
-    blanket[onTop="false"] {
-      background-color: white;
-    }
+  /* @media (prefers-color-scheme: light) { */
+  blanket[onTop="false"] {
+    background-color: white;
   }
+  /* } */
 </style>

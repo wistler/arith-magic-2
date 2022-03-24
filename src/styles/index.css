@@ -29,16 +29,8 @@ body {
   user-select: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #333;
-    color: white;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  body {
-    background: white;
-    color: #333;
-  }
-}
+/* * {
+  transition-property: color, background-color;
+  transition-duration: 4s;
+  transition-timing-function: ease-in-out;
+} */
