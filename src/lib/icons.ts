@@ -5,7 +5,12 @@ export { default as EnterArrowIcon } from "~icons/ion/play-outline";
 export { default as SettingsIcon } from "~icons/ion/settings-outline";
 export { default as HackIcon } from "~icons/ion/hammer";
 export { default as PauseIcon } from "~icons/ion/ios-pause-outline";
-export { default as CheckMarkIcon } from "~icons/ion/checkmark"
-export { default as WaypointIcon } from "~icons/ion/location-outline"
-export { default as PerfectIcon } from "~icons/ion/star-outline"
-export { default as CurrentStepIcon } from "~icons/ion/eye"
+export { default as CheckMarkIcon } from "~icons/ion/checkmark";
+export { default as WaypointIcon } from "~icons/ion/location-outline";
+export { default as PerfectIcon } from "~icons/ion/star-outline";
+export { default as CurrentStepIcon } from "~icons/ion/eye";
+export { default as DarkModeUnselectedIcon } from "~icons/ion/moon-outline";
+export { default as DarkModeSelectedIcon } from "~icons/ion/moon";
+export { default as LightModeUnselectedIcon } from "~icons/ion/sunny-outline";
+export { default as LightModeSelectedIcon } from "~icons/ion/sunny";
+export { default as RefreshIcon } from "~icons/ion/refresh";

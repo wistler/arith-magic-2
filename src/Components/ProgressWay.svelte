@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
-  import { flip } from "svelte/animate";
+  import { isDarkMode } from "../store/profile";
 
   export let steps = [];
   export let current = 0;
 </script>
 
-<waypoints>
+<waypoints class:isDarkMode={$isDarkMode}>
   {#each steps as step, si}
     <waypoint
       class:completed={current > si}
@@ -88,26 +87,26 @@
     }
   }
 
-  @media (prefers-color-scheme: dark) {
-    waypoint.completed {
-      color: #9f9;
-    }
-    waypoint.current {
-      color: #999;
-    }
-
-    waypoint.future {
-      color: #0008;
-    }
-
-    bar.completed {
-      background-color: #999;
-    }
-    bar.current {
-      background-color: #9998;
-    }
-    bar.future {
-      background-color: #0008;
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  waypoints.isDarkMode waypoint.completed {
+    color: #9f9;
   }
+  waypoints.isDarkMode waypoint.current {
+    color: #999;
+  }
+
+  waypoints.isDarkMode waypoint.future {
+    color: #0008;
+  }
+
+  waypoints.isDarkMode bar.completed {
+    background-color: #999;
+  }
+  waypoints.isDarkMode bar.current {
+    background-color: #9998;
+  }
+  waypoints.isDarkMode bar.future {
+    background-color: #0008;
+  }
+  /* } */
 </style>

@@ -6,6 +6,7 @@
   import { SCREENS } from "./Screens";
   import { navStack } from "./store/navigation";
   import { onMount } from "svelte";
+  import { browserPreferDarkMode, isDarkMode } from "./store/profile";
 
   if (window.matchMedia("(prefers-color-scheme)").media !== "not all") {
     console.log("🎉 Dark mode is supported");
@@ -14,6 +15,7 @@
         "(prefers-color-scheme: dark)"
       ).matches;
       console.log({ isDarkMode });
+      $browserPreferDarkMode = isDarkMode;
     }
     checkDarkMode();
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -39,7 +41,7 @@
   });
 </script>
 
-<main style="background-image: url({bg});">
+<main class:isDarkMode={$isDarkMode} style="background-image: url({bg});">
   {#if $navStack.slice(-1)[0] !== "LauncherScreen"}
     <Header />
   {/if}
@@ -74,18 +76,18 @@
     background-position: center;
   }
 
-  @media (prefers-color-scheme: dark) {
-    main {
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      background-blend-mode: darken;
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  main.isDarkMode {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    background-blend-mode: darken;
   }
+  /* } */
 
-  @media (prefers-color-scheme: light) {
-    main {
-      background: white;
-      color: #333;
-    }
+  /* @media (prefers-color-scheme: light) { */
+  main {
+    background: white;
+    color: #333;
   }
+  /* } */
 </style>

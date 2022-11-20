@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { isDarkMode } from "../store/profile";
+
   export let disabled: boolean = undefined;
   export let flat: boolean = false;
   export let tight: boolean = false;
 </script>
 
 <button
+  class:isDarkMode={$isDarkMode}
   {disabled}
   on:click
   style="{flat ? 'box-shadow: none' : ''}; {tight
@@ -37,19 +40,19 @@
     opacity: 30%;
   }
 
-  @media (prefers-color-scheme: dark) {
-    button {
-      background-color: #444;
-      box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
-      color: #ccc;
-    }
-
-    button:active {
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
-    }
-
-    button:disabled {
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  button.isDarkMode {
+    background-color: #444;
+    box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
+    color: #ccc;
   }
+
+  button.isDarkMode:active {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
+  }
+
+  button.isDarkMode:disabled {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  /* } */
 </style>

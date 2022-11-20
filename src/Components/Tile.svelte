@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { isDarkMode } from "../store/profile";
   import type { TileHiliteType } from "../store/game";
 
   export let outlined: boolean = false;
@@ -9,6 +10,7 @@
 </script>
 
 <div
+  class:isDarkMode={$isDarkMode}
   class:outlined
   class:negative
   class:inactive
@@ -105,20 +107,20 @@
     opacity: 30%;
   }
 
-  @media (prefers-color-scheme: dark) {
-    div {
-      --color-positive-number: rgb(166, 166, 228);
-      --color-positive-number-bg: rgb(48, 75, 92);
-      --color-negative-number: rgb(226, 159, 159);
-      --color-negative-number-bg: rgb(88, 54, 54);
-      --color-hover-bg: rgb(80, 80, 80);
-      --color-target-bg: rgb(100, 133, 47);
-      --color-incorrect: rgb(255, 255, 255);
-      --color-incorrect-bg: rgb(161, 71, 55);
-      --color-hint-bg: khaki;
-      --color-selected-bg: rgb(57, 85, 138);
-      --color-disabled: rgb(172, 172, 172);
-      --color-disabled-bg: rgb(99, 99, 99);
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  div.isDarkMode {
+    --color-positive-number: rgb(166, 166, 228);
+    --color-positive-number-bg: rgb(48, 75, 92);
+    --color-negative-number: rgb(226, 159, 159);
+    --color-negative-number-bg: rgb(88, 54, 54);
+    --color-hover-bg: rgb(80, 80, 80);
+    --color-target-bg: rgb(100, 133, 47);
+    --color-incorrect: rgb(255, 255, 255);
+    --color-incorrect-bg: rgb(161, 71, 55);
+    --color-hint-bg: khaki;
+    --color-selected-bg: rgb(57, 85, 138);
+    --color-disabled: rgb(172, 172, 172);
+    --color-disabled-bg: rgb(99, 99, 99);
   }
+  /* } */
 </style>

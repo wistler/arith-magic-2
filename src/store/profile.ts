@@ -1,7 +1,7 @@
 import _ from "lodash";
 import type { Operators } from "../lib/game";
 import { DEFAULT_LEVELS, MAX_LEVEL, unlockLevels } from "../lib/progression";
-import { get } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import { persisted } from "../util/persited";
 import { gameState, isGameOver } from "./game";
 
@@ -21,6 +21,15 @@ export function getListing() {
     };
   });
 }
+
+export const resetProgressAvailable = derived(levels, ($levels) =>
+  _.isEqual($levels, DEFAULT_LEVELS)
+)
+
+export const browserPreferDarkMode = writable(false)
+export const appForcedDarkMode = persisted("forcedDarkMode", false)
+export const appForcedLightMode = persisted("forcedLightMode", false)
+export const isDarkMode = derived([browserPreferDarkMode, appForcedDarkMode, appForcedLightMode], ([$browserPreferDarkMode, $appForcedDarkMode, $appForcedLightMode]) => $appForcedLightMode ? false : $appForcedDarkMode ? true : $browserPreferDarkMode);
 
 export function unlockLevel(ops: Operators[], level: number) {
   const key = ops.join("")

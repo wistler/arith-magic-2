@@ -21,7 +21,7 @@
     <WhiteButton on:click={() => navigateTo("SelectionScreen")}>
       <EnterArrowIcon style="margin-bottom: -0.2em;" />
     </WhiteButton>
-    <WhiteButton disabled on:click={() => navigateTo("SettingsScreen")}>
+    <WhiteButton on:click={() => navigateTo("SettingsScreen")}>
       <SettingsIcon style="margin-bottom: -0.2em;" />
     </WhiteButton>
   </div>

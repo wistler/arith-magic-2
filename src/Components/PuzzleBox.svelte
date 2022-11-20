@@ -12,6 +12,7 @@
   } from "../store/game";
   import { OperatorIcons } from "../assets/Images";
   import { CheckMarkIcon } from "../lib/icons";
+  import { isDarkMode } from "../store/profile";
 
   $: ({ operators } = $gameState);
 
@@ -56,7 +57,7 @@
   $: hilite_3 = calcHilite($activeSelection[2], correct);
 </script>
 
-<puzzleBox>
+<puzzleBox class:isDarkMode={$isDarkMode}>
   <Tile inactive hilite={hilite_1} flat={hilite_1 === "normal"}>
     {$activeSelection.length >= 1 ? $activeSelection[0] : "?"}
   </Tile>
@@ -133,9 +134,9 @@
     height: 1.7em;
     width: 1.7em;
   }
-  @media (prefers-color-scheme: dark) {
-    puzzleBox > img {
-      filter: brightness(60%) contrast(200%);
-    }
+  /* @media (prefers-color-scheme: dark) { */
+  puzzleBox.isDarkMode > img {
+    filter: brightness(60%) contrast(200%);
   }
+  /* } */
 </style>
